@@ -28,14 +28,23 @@ else:
     st.header("Enter Feature Values")
         
     # Input fields for each feature
-    land_class = st.selectbox("Land Class", ["Federal", "Native American"])
-    land_category = st.selectbox("Land Category", ["Onshore", "Offshore", "Not Tied to a Lease"])
-    state = st.selectbox("State", ["Texas","Missouri", "Alaska", "California", "Georgia", "New York", "New Mexico", "Indiana", "Florida", "Washington"])
-    revenue_type = st.selectbox("Royalties", ["Royalty", "Bonus", "Rent", "Inspection fees", "Civil penalties", "Other revenue"])
-    lease_type = st.selectbox("Mineral Lease Type", [ "Hardrock","Limestone", "Gold", "Coal", "Silver", "Oil & Gas", "Sulfur", "Gilsonite", "Gypsum", "Sodium", "Phosphate", "Gemstones"])
-    commodity = st.selectbox("Commodity", ["Oil", "Gas", "Coal", "Copper", "Hardrock", "Natural gas liquids", "Gilsonite", "Phosphate", "Oil & gas (pre-production)", "Geothermal"])
-    county = st.selectbox("County", ["Carbon","Iron", "Eddy", "Sweet Water", "Bannock", "Goshen", "Cleveland", "Franklin", "Washington", "Chambers"])
-    product = st.selectbox("Product", ["Nitrogen", "Copper Concentrate","Oil", "Coal Bed Methane", "Coal", "Gas Plant Products", "Calcium Oxide", "Carbon Dioxide Gas (CO2)", "Fuel Gas", "Fuel Oil", "Helium"])
+    Credit_Score = st.selectbox("Credit Score", ["Federal", "Native American"])
+    Total_TL = st.selectbox("Total TL", ["Onshore", "Offshore", "Not Tied to a Lease"])
+    Age_Oldest_TL = st.selectbox("Age of Oldest TL", ["Texas","Missouri", "Alaska", "California", "Georgia", "New York", "New Mexico", "Indiana", "Florida", "Washington"])
+    enq_L3m = st.selectbox("Enquiries L3M", ["Royalty", "Bonus", "Rent", "Inspection fees", "Civil penalties", "Other revenue"])
+    num_std_6mts = st.selectbox("Mineral Lease Type", [ "Hardrock","Limestone", "Gold", "Coal", "Silver", "Oil & Gas", "Sulfur", "Gilsonite", "Gypsum", "Sodium", "Phosphate", "Gemstones"])
+    num_std_12mts = st.selectbox("Commodity", ["Oil", "Gas", "Coal", "Copper", "Hardrock", "Natural gas liquids", "Gilsonite", "Phosphate", "Oil & gas (pre-production)", "Geothermal"])
+    max_recent_level_of_deliq = st.selectbox("County", ["Carbon","Iron", "Eddy", "Sweet Water", "Bannock", "Goshen", "Cleveland", "Franklin", "Washington", "Chambers"])
+    Tot_Closed_TL = st.selectbox("Product", ["Nitrogen", "Copper Concentrate","Oil", "Coal Bed Methane", "Coal", "Gas Plant Products", "Calcium Oxide", "Carbon Dioxide Gas (CO2)", "Fuel Gas", "Fuel Oil", "Helium"])
+    num_std = 
+    enq_L12m = 
+    tot_enq = 
+    PL_enq = 
+    PROSPECTID = 
+    PL_enq_L12m = 
+    enq_L6m = 
+    Secured_TL = 
+    time_since_recent_enq = 
 
     # Collect input in a DataFrame
     input_data = pd.DataFrame([{
