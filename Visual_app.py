@@ -9,7 +9,7 @@ def login():
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
     if st.button("Login"):
-        if username == "Riya" and password == "Riya@123":
+        if username == "User" and password == "User@123":
             st.session_state["authenticated"] = True
         else:
             st.error("Invalid username or password")
@@ -21,8 +21,8 @@ if "authenticated" not in st.session_state:
 if not st.session_state["authenticated"]:
     login()
 else:
-    st.set_page_config(page_title="Revenue EDA", layout="wide")
-    st.title("Natural Resources Revenue - EDA & Visualization")
+    st.set_page_config(page_title="Visaulizations", layout="wide")
+    st.title("Indian Bank & CIBIL Data - EDA")
 
     @st.cache_data
     def load_data():
