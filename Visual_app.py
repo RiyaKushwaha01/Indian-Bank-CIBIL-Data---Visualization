@@ -33,51 +33,40 @@ else:
     # Sidebar filters
     st.sidebar.header("Filter Data")
 
-    years = sorted(df["Calendar Year"].dropna().unique())
-    land_classes = sorted(df["Land Class"].dropna().unique())
-    states = sorted(df["State"].dropna().unique())
-    land_categories = sorted(df["Land Category"].dropna().unique())
-    revenue_types = sorted(df["Revenue Type"].dropna().unique())
-    lease_types = sorted(df["Mineral Lease Type"].dropna().unique())
-    commodities = sorted(df["Commodity"].dropna().unique())
-    counties = sorted(df["County"].dropna().unique())
-    products = sorted(df["Product"].dropna().unique())
+    EDUACTION = sorted(df["Education Level"].dropna().unique())
+    GENDER = sorted(df["Gender"].dropna().unique())
+    MARITALSTATUS = sorted(df["MaritalStatus"].dropna().unique())
+    first_prod_enq2 = sorted(df["Loan Type"].dropna().unique())
+    Risk_Category = sorted(df["Risk Category"].dropna().unique())
+    Credit_Score_Category = sorted(df["Credit Score Category"].dropna().unique())
 
-    with st.sidebar.expander("📅 Calendar Year", expanded=True):
-        selected_years = st.multiselect("Select Calendar Year", options=years, default=years)
+    with st.sidebar.expander("📅 Education Level", expanded=True):
+        selected_education = st.multiselect("Select Education Level", options=EDUACTION, default=EDUACTION)
 
-    with st.sidebar.expander("🌍 Land Class", expanded=True):
-        selected_land_classes = st.multiselect("Select Land Class", options=land_classes, default=land_classes)
+    with st.sidebar.expander("🌍 Gender", expanded=True):
+        selected_gender = st.multiselect("Select Gender", options=GENDER, default=GENDER)
 
-    with st.sidebar.expander("🏷️ Land Category", expanded=True):
-        selected_land_categories = st.multiselect("Select Land Category", options=land_categories, default=land_categories)
+    with st.sidebar.expander("🏷️MaritalStatus", expanded=True):
+        selected_MaritalStatus = st.multiselect("Select MaritalStatus", options=MARITALSTATUS, default=MARITALSTATUS)
 
-    with st.sidebar.expander("🗺️ State", expanded=True):
-        selected_states = st.multiselect("Select State", options=states, default=states)
+    with st.sidebar.expander("🗺️ Loan Type", expanded=True):
+        selected_first_prod_enq2 = st.multiselect("Select Loan Type", options=first_prod_enq2, default=first_prod_enq2)
 
-    with st.sidebar.expander("🏘️ County", expanded=True):
-        selected_counties = st.multiselect("Select County", options=counties, default=counties)
+    with st.sidebar.expander("🏘️ Risk Category", expanded=True):
+        selected_Risk_Category = st.multiselect("Select Risk Category", options=Risk_Category, default=Risk_Category)
 
-    with st.sidebar.expander("💰 Revenue Type", expanded=True):
-        selected_revenue_types = st.multiselect("Select Revenue Type", options=revenue_types, default=revenue_types)
+    with st.sidebar.expander("💰 Credit Score Category", expanded=True):
+        selected_Credit_Score_Category = st.multiselect("Select Credit Score Category", options=Credit_Score_Category, default=Credit_Score_Category)
 
-    with st.sidebar.expander("📄 Mineral Lease Type", expanded=True):
-        selected_lease_types = st.multiselect("Select Mineral Lease Type", options=lease_types, default=lease_types)
-
-    with st.sidebar.expander("⛏️ Commodity", expanded=True):
-        selected_commodities = st.multiselect("Select Commodity", options=commodities, default=commodities)
-
-    with st.sidebar.expander("📦 Product", expanded=True):
-        selected_products = st.multiselect("Select Product", options=products, default=products)
 
     # ✅ Apply filters
     filtered_df = df[
-        df["Calendar Year"].isin(selected_years) &
-        df["State"].isin(selected_states) &
-        df["Mineral Lease Type"].isin(selected_lease_types) &
-        df["Commodity"].isin(selected_commodities) &
-        df["County"].isin(selected_counties) &
-        df["Product"].isin(selected_products)
+        df["Education Level"].isin(selected_education) &
+        df["Gender"].isin(selected_gender) &
+        df["MaritalStatus"].isin(selected_MaritalStatus) &
+        df["Loan Type"].isin(selected_first_prod_enq2) &
+        df["Risk Category"].isin(selected_Risk_Category) &
+        df["Credit Score Category"].isin(selected_Credit_Score_Category)
     ]
 
     st.subheader("Dataset Preview")
