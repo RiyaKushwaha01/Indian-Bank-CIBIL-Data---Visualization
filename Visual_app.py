@@ -65,10 +65,8 @@ else:
         df2["first_prod_enq2"].isin(selected_loan_type)
     ]
 
-    st.subheader("Filtered Data Preview")
-    st.dataframe(filtered_df2)
 
-    # Education Distribution
+    # 1. Education Distribution
     st.subheader("Distribution of Education")
     edu_data = filtered_df2.groupby("EDUCATION")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig1, ax1 = plt.subplots(figsize=(7, 4))
