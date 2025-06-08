@@ -1,5 +1,6 @@
-streamlit 
-numpy
+streamlit
 pandas
 matplotlib
 seaborn
+openpyxl
+zipfile36
