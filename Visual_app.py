@@ -26,18 +26,18 @@ else:
     st.set_page_config(page_title="Visualizations", layout="wide")
     st.title("Indian Bank & CIBIL Data - EDA")
 
+    # Load data from local ZIP file
     @st.cache_data
-    def load_data_from_zip(zip_file):
-        with zipfile.ZipFile(zip_file) as z:
+    def load_data_from_zip(zip_path):
+        with zipfile.ZipFile(zip_path, 'r') as z:
             file_names = z.namelist()
             df1 = pd.read_excel(z.open([f for f in file_names if "Internal_Bank_Dataset" in f][0]))
             df2 = pd.read_excel(z.open([f for f in file_names if "External_Cibil_Dataset" in f][0]))
         return df1, df2
 
-    # Upload ZIP
-    uploaded_file = st.file_uploader("Upload ZIP file", type=["zip"])
-    if uploaded_file:
-        df1, df2 = load_data_from_zip(uploaded_file)
+    # Load ZIP file from local path
+    zip_file_path = os.path.join(os.getcwd(), "Dataset 1.zip")
+    df1, df2 = load_data_from_zip(zip_file_path)
 
         # Sidebar filters
         st.sidebar.header("Filter Data")
