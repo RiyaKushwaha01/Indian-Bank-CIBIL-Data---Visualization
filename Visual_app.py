@@ -34,22 +34,7 @@ else:
             df2 = pd.read_excel(z.open([f for f in file_names if "External_Cibil_Dataset" in f][0]))
         return df1, df2
 
-    # File uploader
-    uploaded_zip = st.file_uploader("Upload ZIP file with Excel datasets", type="zip")
-
-    if uploaded_zip:
-        df1, df2 = load_data_from_zip(uploaded_zip)
-        st.success("Files loaded successfully!")
-
-        # Show the original dataframes
-        st.subheader("Internal Bank Dataset")
-        st.write(df1.head())
-
-        st.subheader("External CIBIL Dataset")
-        st.write(df2.head())
-
-        # You can apply filters on df1 or df2 as needed
-        df = df1  # Example: using df1 for filtering
+      
 
         # Sidebar filters
         st.sidebar.header("Filter Data")
