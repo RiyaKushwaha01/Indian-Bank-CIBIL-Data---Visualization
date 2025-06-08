@@ -60,12 +60,12 @@ else:
         df2["GENDER"].isin(selected_gender) &
         df2["MARITALSTATUS"].isin(selected_marital_status) &
         df2["first_prod_enq2"].isin(selected_loan_type)
-    ]
+    ] 
 
     # 1. Education Distribution
     st.subheader("Distribution of Education")
     try:
-        edu_data = filtered_df2.groupby("EDUCATION")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
+        edu_data = df2.groupby("EDUCATION")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
         fig1, ax1 = plt.subplots(figsize=(7, 4))
         bars = ax1.bar(edu_data["EDUCATION"], edu_data["PROSPECTID"], color='skyblue', edgecolor='black')
         ax1.set_title("Education Distribution", fontsize=10)
@@ -83,7 +83,7 @@ else:
 
     # 2. Gender Pie
     st.subheader("Gender Distribution")
-    gender_data = filtered_df2["GENDER"].value_counts()
+    gender_data =  df2["GENDER"].value_counts()
     fig2, ax2 = plt.subplots(figsize=(3, 3))
     ax2.pie(gender_data, labels=gender_data.index, autopct="%.2f%%", startangle=90)
     ax2.axis("equal")
@@ -92,7 +92,7 @@ else:
 
     # 3. Marital Status Distribution
     st.subheader("Marital Status Distribution")
-    marital_data = filtered_df2["MARITALSTATUS"].value_counts().reset_index()
+    marital_data =  df2["MARITALSTATUS"].value_counts().reset_index()
     marital_data.columns = ["MARITALSTATUS", "Count"]
     fig3, ax3 = plt.subplots(figsize=(7, 4))
     bars = ax3.barh(marital_data["MARITALSTATUS"], marital_data["Count"], color='lightgreen', edgecolor='black')
@@ -106,7 +106,7 @@ else:
 
     # 4. Loan Type Distribution
     st.subheader("Loan Type Distribution")
-    loan_data = filtered_df2.groupby("first_prod_enq2")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
+    loan_data =  df2.groupby("first_prod_enq2")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig4, ax4 = plt.subplots(figsize=(7, 4))
     bars = ax4.barh(loan_data["first_prod_enq2"], loan_data["PROSPECTID"], color='orange', edgecolor='black')
     ax4.set_title("Loan Type Distribution", fontsize=10)
