@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import zipfile
 import os
 
 # Set page config at the very top before any Streamlit calls
@@ -31,15 +30,15 @@ if not st.session_state["authenticated"]:
 else:
     st.title("Indian Bank & CIBIL Data - EDA")
     
-# Load data from local Excel files
-@st.cache_data
-def load_data_from_local():
-    df1 = pd.read_excel("Internal_Bank_Dataset.xlsx")
-    df2 = pd.read_excel("External_Cibil_Dataset.xlsx")
-    return df1, df2
+    # Load data from local Excel files
+    @st.cache_data
+    def load_data_from_local():
+        df1 = pd.read_excel("Internal_Bank_Dataset.xlsx")
+        df2 = pd.read_excel("External_Cibil_Dataset.xlsx")
+        return df1, df2
 
-# Call the function
-df1, df2 = load_data_from_local()
+    # Call the function
+    df1, df2 = load_data_from_local()
 
     # Sidebar filters
     st.sidebar.header("Filter Data")
@@ -75,7 +74,7 @@ df1, df2 = load_data_from_local()
                          xytext=(0, 3), textcoords="offset points",
                          ha='center', va='bottom', fontsize=6)
         st.pyplot(fig1)
-        plt.close(fig1)  # Close the figure after rendering to avoid memory issues
+        plt.close(fig1)
     except Exception as e:
         st.error(f"An error occurred while plotting the Education Distribution graph: {e}")
 
