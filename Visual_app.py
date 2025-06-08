@@ -75,7 +75,7 @@ else:
                      ha='center', va='bottom', fontsize=6)
     st.pyplot(fig1)
 
-    # Gender Pie
+    # 2. Gender Pie
     st.subheader("Gender Distribution")
     gender_data = filtered_df2["GENDER"].value_counts()
     fig2, ax2 = plt.subplots(figsize=(3, 3))
@@ -83,18 +83,20 @@ else:
     ax2.axis("equal")
     st.pyplot(fig2)
 
-    # Marital Status
+    # 3. Marital Status
     st.subheader("Marital Status Distribution")
     marital_data = filtered_df2["MARITALSTATUS"].value_counts().reset_index()
+    marital_data.columns = ["MARITALSTATUS", "Count"]
     fig3, ax3 = plt.subplots(figsize=(7, 4))
-    ax3.barh(marital_data["index"], marital_data["MARITALSTATUS"])
+    ax3.barh(marital_data["MARITALSTATUS"], marital_data["Count"])
     ax3.set_title("Marital Status Distribution", fontsize=10)
     for p in ax3.patches:
         ax3.annotate(format_value(p.get_width()), (p.get_width(), p.get_y() + p.get_height() / 2),
                      ha='left', va='center', fontsize=6)
     st.pyplot(fig3)
 
-    # Loan Type
+
+    # 4. Loan Type
     st.subheader("Loan Type Distribution")
     loan_data = filtered_df2.groupby("first_prod_enq2")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig4, ax4 = plt.subplots(figsize=(7, 4))
@@ -105,7 +107,7 @@ else:
                      ha='left', va='center', fontsize=6)
     st.pyplot(fig4)
 
-    # Income
+    # 5.  Income
     st.subheader("Top 5 Applicants by Income")
     income_data = df2.groupby("NETMONTHLYINCOME")["PROSPECTID"].count().sort_values(ascending=False).head(5).reset_index()
     fig5, ax5 = plt.subplots(figsize=(7, 4))
@@ -113,7 +115,7 @@ else:
     ax5.set_title("Top 5 Income Applicants", fontsize=10)
     st.pyplot(fig5)
 
-    # Credit Score
+    # 6. Credit Score
     st.subheader("Top 10 Credit Scores")
     score_data = df2.groupby("Credit_Score")["PROSPECTID"].count().sort_values(ascending=False).head(10).reset_index()
     fig6, ax6 = plt.subplots(figsize=(7, 4))
@@ -121,7 +123,7 @@ else:
     ax6.set_title("Credit Score Distribution", fontsize=10)
     st.pyplot(fig6)
 
-    # Risk Category
+    # 7. Risk Category
     st.subheader("Risk Category Pie")
     risk_data = df1.groupby("Risk_Category")["PROSPECTID"].count()
     fig7, ax7 = plt.subplots(figsize=(3, 3))
@@ -129,7 +131,7 @@ else:
     ax7.axis("equal")
     st.pyplot(fig7)
 
-    # Credit Score Category
+    # 8. Credit Score Category
     st.subheader("Credit Score Segmentation")
     seg_data = df1.groupby("Credit_Score_Category")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig8, ax8 = plt.subplots(figsize=(7, 4))
@@ -137,7 +139,7 @@ else:
     ax8.set_title("Credit Score Segmentation", fontsize=10)
     st.pyplot(fig8)
 
-    # Approved Flag
+    # 9. Approved Flag
     st.subheader("Approved Flag Distribution")
     flag_data = df2.groupby("Approved_Flag")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig9, ax9 = plt.subplots(figsize=(7, 4))
@@ -145,7 +147,7 @@ else:
     ax9.set_title("Approved Flag", fontsize=10)
     st.pyplot(fig9)
 
-    # Missed Payments
+    # 10. Missed Payments
     st.subheader("Top Missed Payments")
     missed_data = df1[df1["Tot_Missed_Pmnt"] > 0].groupby("Tot_Missed_Pmnt")["PROSPECTID"].count().sort_values(ascending=False).head(5).reset_index()
     fig10, ax10 = plt.subplots(figsize=(7, 4))
@@ -153,7 +155,7 @@ else:
     ax10.set_title("Top Missed Payments", fontsize=10)
     st.pyplot(fig10)
 
-    # New Accounts
+    # 11. New Accounts
     st.subheader("New Accounts Opened in Last 6 Months")
     new_data = df1.groupby("Total_TL_opened_L6M")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig11, ax11 = plt.subplots(figsize=(7, 4))
@@ -161,7 +163,7 @@ else:
     ax11.set_title("New Accounts in Last 6M", fontsize=10)
     st.pyplot(fig11)
 
-    # Closed Accounts
+    # 12. Closed Accounts
     st.subheader("Accounts Closed in Last 6 Months")
     closed_data = df1.groupby("Tot_TL_closed_L6M")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig12, ax12 = plt.subplots(figsize=(7, 4))
