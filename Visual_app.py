@@ -45,7 +45,6 @@ else:
 
     # Sidebar filters
     st.sidebar.header("Filter Data")
-
     EDUCATION = sorted(df2["EDUCATION"].dropna().unique())
     GENDER = sorted(df2["GENDER"].dropna().unique())
     MARITALSTATUS = sorted(df2["MARITALSTATUS"].dropna().unique())
@@ -65,18 +64,22 @@ else:
 
     # 1. Education Distribution
     st.subheader("Distribution of Education")
-    edu_data = filtered_df2.groupby("EDUCATION")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
-    fig1, ax1 = plt.subplots(figsize=(7, 4))
-    ax1.bar(edu_data["EDUCATION"], edu_data["PROSPECTID"])
-    ax1.set_title("Education Distribution", fontsize=10)
-    ax1.tick_params(axis='x', labelrotation=45)
-    for p in ax1.patches:
-        ax1.annotate(format_value(p.get_height()), (p.get_x() + p.get_width() / 2, p.get_height()),
-                     ha='center', va='bottom', fontsize=6)
-    st.pyplot(fig1)
-    plt.close(fig1)  # Close the figure after rendering to avoid memory issues
+    try:
+        edu_data = filtered_df2.groupby("EDUCATION")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
+        fig1, ax1 = plt.subplots(figsize=(7, 4))
+        bars = ax1.bar(edu_data["EDUCATION"], edu_data["PROSPECTID"], color='skyblue', edgecolor='black')
+        ax1.set_title("Education Distribution", fontsize=10)
+        ax1.tick_params(axis='x', labelrotation=45)
+        for bar in bars:
+            height = bar.get_height()
+            ax1.annotate(format_value(height),
+                         xy=(bar.get_x() + bar.get_width() / 2, height),
+                         xytext=(0, 3), textcoords="offset points",
+                         ha='center', va='bottom', fontsize=6)
+        st.pyplot(fig1)
+        plt.close(fig1)  # Close the figure after rendering to avoid memory issues
     except Exception as e:
-        st.error(f"An error occurred while plotting the graph: {e}")
+        st.error(f"An error occurred while plotting the Education Distribution graph: {e}")
 
     # 2. Gender Pie
     st.subheader("Gender Distribution")
@@ -85,91 +88,103 @@ else:
     ax2.pie(gender_data, labels=gender_data.index, autopct="%.2f%%", startangle=90)
     ax2.axis("equal")
     st.pyplot(fig2)
+    plt.close(fig2)
 
-    # 3. Marital Status
+    # 3. Marital Status Distribution
     st.subheader("Marital Status Distribution")
     marital_data = filtered_df2["MARITALSTATUS"].value_counts().reset_index()
     marital_data.columns = ["MARITALSTATUS", "Count"]
     fig3, ax3 = plt.subplots(figsize=(7, 4))
-    ax3.barh(marital_data["MARITALSTATUS"], marital_data["Count"])
+    bars = ax3.barh(marital_data["MARITALSTATUS"], marital_data["Count"], color='lightgreen', edgecolor='black')
     ax3.set_title("Marital Status Distribution", fontsize=10)
-    for p in ax3.patches:
-        ax3.annotate(format_value(p.get_width()), (p.get_width(), p.get_y() + p.get_height() / 2),
+    for bar in bars:
+        ax3.annotate(format_value(bar.get_width()),
+                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
                      ha='left', va='center', fontsize=6)
     st.pyplot(fig3)
+    plt.close(fig3)
 
-
-    # 4. Loan Type
+    # 4. Loan Type Distribution
     st.subheader("Loan Type Distribution")
     loan_data = filtered_df2.groupby("first_prod_enq2")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig4, ax4 = plt.subplots(figsize=(7, 4))
-    ax4.barh(loan_data["first_prod_enq2"], loan_data["PROSPECTID"])
+    bars = ax4.barh(loan_data["first_prod_enq2"], loan_data["PROSPECTID"], color='orange', edgecolor='black')
     ax4.set_title("Loan Type Distribution", fontsize=10)
-    for p in ax4.patches:
-        ax4.annotate(format_value(p.get_width()), (p.get_width(), p.get_y() + p.get_height() / 2),
+    for bar in bars:
+        ax4.annotate(format_value(bar.get_width()),
+                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
                      ha='left', va='center', fontsize=6)
     st.pyplot(fig4)
+    plt.close(fig4)
 
-    # 5.  Income
+    # 5. Top 5 Applicants by Income
     st.subheader("Top 5 Applicants by Income")
     income_data = df2.groupby("NETMONTHLYINCOME")["PROSPECTID"].count().sort_values(ascending=False).head(5).reset_index()
     fig5, ax5 = plt.subplots(figsize=(7, 4))
-    ax5.bar(income_data["NETMONTHLYINCOME"], income_data["PROSPECTID"])
+    ax5.bar(income_data["NETMONTHLYINCOME"].astype(str), income_data["PROSPECTID"], color='magenta', edgecolor='black')
     ax5.set_title("Top 5 Income Applicants", fontsize=10)
     st.pyplot(fig5)
+    plt.close(fig5)
 
-    # 6. Credit Score
+    # 6. Top 10 Credit Scores
     st.subheader("Top 10 Credit Scores")
     score_data = df2.groupby("Credit_Score")["PROSPECTID"].count().sort_values(ascending=False).head(10).reset_index()
     fig6, ax6 = plt.subplots(figsize=(7, 4))
-    ax6.bar(score_data["Credit_Score"], score_data["PROSPECTID"])
+    ax6.bar(score_data["Credit_Score"].astype(str), score_data["PROSPECTID"], color='purple', edgecolor='black')
     ax6.set_title("Credit Score Distribution", fontsize=10)
     st.pyplot(fig6)
+    plt.close(fig6)
 
-    # 7. Risk Category
-    st.subheader("Risk Category Pie")
+    # 7. Risk Category Pie
+    st.subheader("Risk Category Distribution")
     risk_data = df1.groupby("Risk_Category")["PROSPECTID"].count()
     fig7, ax7 = plt.subplots(figsize=(3, 3))
     ax7.pie(risk_data, labels=risk_data.index, autopct="%.2f%%", startangle=90)
     ax7.axis("equal")
     st.pyplot(fig7)
+    plt.close(fig7)
 
-    # 8. Credit Score Category
+    # 8. Credit Score Segmentation
     st.subheader("Credit Score Segmentation")
     seg_data = df1.groupby("Credit_Score_Category")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig8, ax8 = plt.subplots(figsize=(7, 4))
-    ax8.barh(seg_data["Credit_Score_Category"], seg_data["PROSPECTID"])
+    ax8.barh(seg_data["Credit_Score_Category"], seg_data["PROSPECTID"], color='teal', edgecolor='black')
     ax8.set_title("Credit Score Segmentation", fontsize=10)
     st.pyplot(fig8)
+    plt.close(fig8)
 
-    # 9. Approved Flag
+    # 9. Approved Flag Distribution
     st.subheader("Approved Flag Distribution")
     flag_data = df2.groupby("Approved_Flag")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig9, ax9 = plt.subplots(figsize=(7, 4))
-    ax9.barh(flag_data["Approved_Flag"], flag_data["PROSPECTID"])
+    ax9.barh(flag_data["Approved_Flag"], flag_data["PROSPECTID"], color='brown', edgecolor='black')
     ax9.set_title("Approved Flag", fontsize=10)
     st.pyplot(fig9)
+    plt.close(fig9)
 
-    # 10. Missed Payments
+    # 10. Top Missed Payments
     st.subheader("Top Missed Payments")
     missed_data = df1[df1["Tot_Missed_Pmnt"] > 0].groupby("Tot_Missed_Pmnt")["PROSPECTID"].count().sort_values(ascending=False).head(5).reset_index()
     fig10, ax10 = plt.subplots(figsize=(7, 4))
-    ax10.barh(missed_data["Tot_Missed_Pmnt"], missed_data["PROSPECTID"])
+    ax10.barh(missed_data["Tot_Missed_Pmnt"].astype(str), missed_data["PROSPECTID"], color='red', edgecolor='black')
     ax10.set_title("Top Missed Payments", fontsize=10)
     st.pyplot(fig10)
+    plt.close(fig10)
 
-    # 11. New Accounts
+    # 11. New Accounts Opened in Last 6 Months
     st.subheader("New Accounts Opened in Last 6 Months")
     new_data = df1.groupby("Total_TL_opened_L6M")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig11, ax11 = plt.subplots(figsize=(7, 4))
-    ax11.barh(new_data["Total_TL_opened_L6M"], new_data["PROSPECTID"])
+    ax11.barh(new_data["Total_TL_opened_L6M"].astype(str), new_data["PROSPECTID"], color='navy', edgecolor='black')
     ax11.set_title("New Accounts in Last 6M", fontsize=10)
     st.pyplot(fig11)
+    plt.close(fig11)
 
-    # 12. Closed Accounts
+    # 12. Accounts Closed in Last 6 Months
     st.subheader("Accounts Closed in Last 6 Months")
     closed_data = df1.groupby("Tot_TL_closed_L6M")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig12, ax12 = plt.subplots(figsize=(7, 4))
-    ax12.barh(closed_data["Tot_TL_closed_L6M"], closed_data["PROSPECTID"])
+    ax12.barh(closed_data["Tot_TL_closed_L6M"].astype(str), closed_data["PROSPECTID"], color='gray', edgecolor='black')
     ax12.set_title("Closed Accounts in Last 6M", fontsize=10)
     st.pyplot(fig12)
+    plt.close(fig12)
