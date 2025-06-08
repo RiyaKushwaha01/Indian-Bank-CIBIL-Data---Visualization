@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import zipfile
 import os
 
 # Set page config at the very top before any Streamlit calls
@@ -30,15 +31,13 @@ if not st.session_state["authenticated"]:
 else:
     st.title("Indian Bank & CIBIL Data - EDA")
     
-    # Load data from local Excel files
     @st.cache_data
-    def load_data_from_local():
-        df1 = pd.read_excel("Internal_Bank_Dataset.xlsx")
-        df2 = pd.read_excel("External_Cibil_Dataset.xlsx")
+    def load_data_from_zip(zip_path="datasets.zip"):
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall("unzipped_data")
+        df1 = pd.read_excel("unzipped_data/Internal_Bank_Dataset.xlsx")
+        df2 = pd.read_excel("unzipped_data/External_Cibil_Dataset.xlsx")
         return df1, df2
-
-    # Call the function
-    df1, df2 = load_data_from_local()
 
     # Sidebar filters
     st.sidebar.header("Filter Data")
