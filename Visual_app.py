@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import zipfile
+from io import BytesIO
 
 # --- Login Section ---
 def login():
@@ -21,56 +23,75 @@ if "authenticated" not in st.session_state:
 if not st.session_state["authenticated"]:
     login()
 else:
-    st.set_page_config(page_title="Visaulizations", layout="wide")
+    st.set_page_config(page_title="Visualizations", layout="wide")
     st.title("Indian Bank & CIBIL Data - EDA")
 
     @st.cache_data
-    def load_data():
-        return pd.read_csv("Natural_Resources_Revenue.csv")
+    def load_data_from_zip(zip_file):
+        with zipfile.ZipFile(zip_file) as z:
+            file_names = z.namelist()
+            df1 = pd.read_excel(z.open([f for f in file_names if "Internal_Bank_Dataset" in f][0]))
+            df2 = pd.read_excel(z.open([f for f in file_names if "External_Cibil_Dataset" in f][0]))
+        return df1, df2
 
-    df = load_data()
+    # File uploader
+    uploaded_zip = st.file_uploader("Upload ZIP file with Excel datasets", type="zip")
 
-    # Sidebar filters
-    st.sidebar.header("Filter Data")
+    if uploaded_zip:
+        df1, df2 = load_data_from_zip(uploaded_zip)
+        st.success("Files loaded successfully!")
 
-    EDUACTION = sorted(df["Education Level"].dropna().unique())
-    GENDER = sorted(df["Gender"].dropna().unique())
-    MARITALSTATUS = sorted(df["MaritalStatus"].dropna().unique())
-    first_prod_enq2 = sorted(df["Loan Type"].dropna().unique())
-    Risk_Category = sorted(df["Risk Category"].dropna().unique())
-    Credit_Score_Category = sorted(df["Credit Score Category"].dropna().unique())
+        # Show the original dataframes
+        st.subheader("Internal Bank Dataset")
+        st.write(df1.head())
 
-    with st.sidebar.expander("📅 Education Level", expanded=True):
-        selected_education = st.multiselect("Select Education Level", options=EDUACTION, default=EDUACTION)
+        st.subheader("External CIBIL Dataset")
+        st.write(df2.head())
 
-    with st.sidebar.expander("🌍 Gender", expanded=True):
-        selected_gender = st.multiselect("Select Gender", options=GENDER, default=GENDER)
+        # You can apply filters on df1 or df2 as needed
+        df = df1  # Example: using df1 for filtering
 
-    with st.sidebar.expander("🏷️MaritalStatus", expanded=True):
-        selected_MaritalStatus = st.multiselect("Select MaritalStatus", options=MARITALSTATUS, default=MARITALSTATUS)
+        # Sidebar filters
+        st.sidebar.header("Filter Data")
 
-    with st.sidebar.expander("🗺️ Loan Type", expanded=True):
-        selected_first_prod_enq2 = st.multiselect("Select Loan Type", options=first_prod_enq2, default=first_prod_enq2)
+        EDUCATION = sorted(df["Education Level"].dropna().unique())
+        GENDER = sorted(df["Gender"].dropna().unique())
+        MARITALSTATUS = sorted(df["MaritalStatus"].dropna().unique())
+        LOAN_TYPE = sorted(df["Loan Type"].dropna().unique())
+        RISK_CATEGORY = sorted(df["Risk Category"].dropna().unique())
+        CREDIT_SCORE_CATEGORY = sorted(df["Credit Score Category"].dropna().unique())
 
-    with st.sidebar.expander("🏘️ Risk Category", expanded=True):
-        selected_Risk_Category = st.multiselect("Select Risk Category", options=Risk_Category, default=Risk_Category)
+        with st.sidebar.expander("📚 Education Level", expanded=True):
+            selected_education = st.multiselect("Select Education Level", options=EDUCATION, default=EDUCATION)
 
-    with st.sidebar.expander("💰 Credit Score Category", expanded=True):
-        selected_Credit_Score_Category = st.multiselect("Select Credit Score Category", options=Credit_Score_Category, default=Credit_Score_Category)
+        with st.sidebar.expander("🌍 Gender", expanded=True):
+            selected_gender = st.multiselect("Select Gender", options=GENDER, default=GENDER)
 
+        with st.sidebar.expander("💍 Marital Status", expanded=True):
+            selected_marital_status = st.multiselect("Select Marital Status", options=MARITALSTATUS, default=MARITALSTATUS)
 
-    # ✅ Apply filters
-    filtered_df = df[
-        df["Education Level"].isin(selected_education) &
-        df["Gender"].isin(selected_gender) &
-        df["MaritalStatus"].isin(selected_MaritalStatus) &
-        df["Loan Type"].isin(selected_first_prod_enq2) &
-        df["Risk Category"].isin(selected_Risk_Category) &
-        df["Credit Score Category"].isin(selected_Credit_Score_Category)
-    ]
+        with st.sidebar.expander("🏦 Loan Type", expanded=True):
+            selected_loan_type = st.multiselect("Select Loan Type", options=LOAN_TYPE, default=LOAN_TYPE)
 
-    st.subheader("Dataset Preview")
-    st.dataframe(filtered_df)
+        with st.sidebar.expander("⚠️ Risk Category", expanded=True):
+            selected_risk_category = st.multiselect("Select Risk Category", options=RISK_CATEGORY, default=RISK_CATEGORY)
+
+        with st.sidebar.expander("💳 Credit Score Category", expanded=True):
+            selected_credit_score_category = st.multiselect("Select Credit Score Category", options=CREDIT_SCORE_CATEGORY, default=CREDIT_SCORE_CATEGORY)
+
+        # ✅ Apply filters
+        filtered_df = df[
+            df["Education Level"].isin(selected_education) &
+            df["Gender"].isin(selected_gender) &
+            df["MaritalStatus"].isin(selected_marital_status) &
+            df["Loan Type"].isin(selected_loan_type) &
+            df["Risk Category"].isin(selected_risk_category) &
+            df["Credit Score Category"].isin(selected_credit_score_category)
+        ]
+
+        st.subheader("Filtered Dataset")
+        st.dataframe(filtered_df)
+
 
     # Function to format numbers in millions or billions
     def format_revenue(value):
@@ -84,152 +105,163 @@ else:
     # 1. Distribution of Education Level
     st.subheader("Distribution of Education Level")
     Education_Level = filtered_df.groupby("EDUCATION")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
-    fig1, ax1 = plt.subplots(figsize=(6, 3))
-    sns.lineplot(data=revenue_trends, x="Calendar Year", y="Revenue", ax=ax1, marker='o')
+    fig1, ax1 = plt.subplots(figsize=(7, 4))
+    Education_Level.plot(kind="bar", width=0.7, ax=ax1)
     ax1.set_title("Distribution of Education Level", fontsize=8)
-    ax1.set_xlabel("Education Level", fontsize=6)
-    ax1.set_ylabel("Applicants Count", fontsize=6)
     ax1.tick_params(axis='y', labelsize=6)
     ax1.tick_params(axis='x', labelsize=6)
 
-    # Add smart label positioning
-    previous_y = None
-    for i in range(len(revenue_trends)):
-        x = revenue_trends["Calendar Year"].iloc[i]
-        y = revenue_trends["Revenue"].iloc[i]
-        offset = 0.05 * y  # 5% offset
-
-        if previous_y is not None and abs(y - previous_y) < 0.15 * y:
-            # If points are close, adjust label position up or down
-            va = 'top' if i % 2 == 0 else 'bottom'
-        else:
-            va = 'bottom'
-
-        ax1.text(x, y + (offset if va == 'bottom' else -offset), format_revenue(y),
-                 fontsize=6, ha='center', va=va, weight='bold')
-
-        previous_y = y
+    # Add data labels
+    for p in ax1.patches:
+        ax1.annotate(format_education(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
+                     ha='center', va='center', fontsize=6, xytext=(0, 5), textcoords='offset points')
 
     st.pyplot(fig1)
 
-    # State by Revenue
-    st.subheader("Top 10 States by Revenue")
-    state_revenue = filtered_df.groupby("State")["Revenue"].sum().sort_values(ascending=False).head(10)
-    fig2, ax2 = plt.subplots(figsize=(7, 4))
-    state_revenue.plot(kind="bar", width=0.7, ax=ax2)
-    ax2.set_title("State by Revenue", fontsize=8)
-    ax2.tick_params(axis='y', labelsize=6)
-    ax2.tick_params(axis='x', labelsize=6)
 
-    # Add data labels
-    for p in ax2.patches:
-        ax2.annotate(format_revenue(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
-                     ha='center', va='center', fontsize=6, xytext=(0, 5), textcoords='offset points')
-
+    # 2. Distribution of Gender
+    st.subheader("Distribution of Gender")
+    Gender_Distribution = df.groupby("GENDER")["PROSPECTID"].sum()  # Changed to df
+    fig2, ax2 = plt.subplots(figsize=(2, 2))
+    ax2.pie(Gender_Distribution, labels=Gender_Distribution.index, autopct="%.2f%%", startangle=90, wedgeprops={'edgecolor': 'white'})
+    ax2.axis("equal")
+    ax2.set_title("Distribution of Gender", fontsize=8)
     st.pyplot(fig2)
 
-    # County by Revenue
-    st.subheader("County by Revenue")
-    if "County" in filtered_df.columns and not filtered_df["County"].dropna().empty:
-        county_revenue = filtered_df.groupby("County")["Revenue"].sum().sort_values(ascending=False).head(10)
-        fig3, ax3 = plt.subplots(figsize=(8, 4))
-        county_revenue.plot(kind="bar", ax=ax3)
-        ax3.set_title("County by Revenue", fontsize=8)
-        ax3.set_xlabel("Revenue")
-        ax3.tick_params(axis='x', labelsize=6)
+    # 3. Distribution of Maritalstatus
+    st.subheader("Distribution of Maritalstatus")
+    MaritalStatus = filtered_df.groupby("MARITALSTATUS")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    fig3, ax3 = plt.subplots(figsize=(7, 4))
+    MaritalStatus.plot(kind="barh", width=0.7, ax=ax3)
+    ax3.set_title("Distribution of Maritalstatus", fontsize=8)
+    ax3.tick_params(axis='y', labelsize=6)
+    ax3.tick_params(axis='x', labelsize=6)
 
-        # Add data labels
-        for p in ax3.patches:
-            ax3.annotate(format_revenue(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
-                         ha='center', va='center', fontsize=6, xytext=(0, 5), textcoords='offset points')
+    # Add data labels
+    for p in ax3.patches:
+        ax3.annotate(format_MaritalStatus(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
+                     ha='center', va='center', fontsize=6, xytext=(0, 5), textcoords='offset points')
 
-        st.pyplot(fig3)
-    else:
-        st.warning("County column missing or contains only NaN.")
+    st.pyplot(fig3)
 
-    # Correlation Analysis
-    st.subheader("Correlation Analysis")
-    fig4, ax4 = plt.subplots(figsize=(4, 3))
-    sns.heatmap(filtered_df.select_dtypes(include=['float64', 'int64']).corr(), annot=True, ax=ax4)
-    ax4.set_title("Correlation Analysis", fontsize=8)
-    st.pyplot(fig4)
+    # 4. Distribution of Loan Type
+    st.subheader("Distribution of Loan Type")
+    Loan_Type = filtered_df.groupby("first_prod_enq2")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    fig4, ax4 = plt.subplots(figsize=(7, 4))
+    Loan_Type.plot(kind="barh", width=0.7, ax=ax4)
+    ax4.set_title("Distribution of Loan Type", fontsize=8)
+    ax4.tick_params(axis='y', labelsize=6)
+    ax4.tick_params(axis='x', labelsize=6)
 
-    # Revenue by Commodity and Lease Type
-    st.subheader("Total Revenue for Commodity and Mineral Lease Type")
-    revenue_by_combo = filtered_df.groupby(["Commodity", "Mineral Lease Type"])["Revenue"].sum().sort_values(ascending=False).head(10)
-    fig5, ax5 = plt.subplots(figsize=(8, 4))
-    revenue_by_combo.plot(kind="bar", ax=ax5)
-    ax5.set_title("Total Revenue for Commodity and Lease Type", fontsize=8)
-    ax5.set_ylabel("Revenue")
-    ax5.set_xlabel("Commodity and Lease Type")
+    # Add data labels
+    for p in ax4.patches:
+        ax4.annotate(format_Loan_Type(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
+                     ha='center', va='center', fontsize=6, xytext=(0, 5), textcoords='offset points')
+
+    # 5.  Top 5 Income of Applicants
+    st.subheader("Top 5 Income of Applicants")
+    Applicants_Income = filtered_df.groupby("NETMONTHLYINCOME")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    fig5, ax5 = plt.subplots(figsize=(7, 4))
+    Applicants_Income.plot(kind="bar", width=0.7, ax=ax5)
+    ax5.set_title("Top 5 Income of Applicants", fontsize=8)
     ax5.tick_params(axis='y', labelsize=6)
     ax5.tick_params(axis='x', labelsize=6)
 
     # Add data labels
     for p in ax5.patches:
-        ax5.annotate(format_revenue(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
+        ax5.annotate(format_Income(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
                      ha='center', va='center', fontsize=6, xytext=(0, 5), textcoords='offset points')
 
-    st.pyplot(fig5)
-
-    # Revenue by Land Class (use df instead of filtered_df)
-    st.subheader("Revenue by Land Class")
-    revenue_land_class = df.groupby("Land Class")["Revenue"].sum()  # Changed to df
-    fig6, ax6 = plt.subplots(figsize=(2, 2))
-    ax6.pie(revenue_land_class, labels=revenue_land_class.index, autopct="%.2f%%", startangle=90, wedgeprops={'edgecolor': 'white'})
-    ax6.axis("equal")
-    ax6.set_title("Revenue Distribution by Land Class", fontsize=8)
-    st.pyplot(fig6)
-
-    # Revenue by Land Category (use df instead of filtered_df)
-    st.subheader("Revenue by Land Category")
-    revenue_land_category = df.groupby("Land Category")["Revenue"].sum()  # Changed to df
-    fig7, ax7 = plt.subplots(figsize=(7, 4))
-    revenue_land_category.plot(kind="bar", ax=ax7)
-    ax7.set_title("Revenue by Land Category", fontsize=8)
-    ax7.tick_params(axis='y', labelsize=6)
-    ax7.tick_params(axis='x', labelsize=6)
+    # 6. Top 10 Credit Score
+    st.subheader("Top 10 Credit Scores")
+    Credit_Score = filtered_df.groupby("Credit_Score")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    fig6, ax6 = plt.subplots(figsize=(7, 4))
+    Credit_Score.plot(kind="bar", width=0.7, ax=ax6)
+    ax6.set_title("Top 5 Income of Applicants", fontsize=8)
+    ax6.tick_params(axis='y', labelsize=6)
+    ax6.tick_params(axis='x', labelsize=6)
 
     # Add data labels
-    for p in ax7.patches:
-        ax7.annotate(format_revenue(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
+    for p in ax6.patches:
+        ax6.annotate(format_Credit_Score(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
                      ha='center', va='center', fontsize=6, xytext=(0, 5), textcoords='offset points')
 
+    # 7. Distribution of Risk Category
+    st.subheader("Distribution of Risk Category")
+    Risk_Category = df.groupby("Risk_Category")["PROSPECTID"].sum()  # Changed to df
+    fig7, ax7 = plt.subplots(figsize=(2, 2))
+    ax7.pie(Risk_Category, labels=Risk_Category.index, autopct="%.2f%%", startangle=90, wedgeprops={'edgecolor': 'white'})
+    ax7.axis("equal")
+    ax7.set_title("Distribution of Risk Category", fontsize=8)
     st.pyplot(fig7)
 
-    # Revenue by Revenue Type (use df instead of filtered_df)
-    st.subheader("Top Revenue Types by Total Revenue")
-    revenue_rev_type = df.groupby("Revenue Type")["Revenue"].sum().sort_values(ascending=False)  # Changed to df
-    fig8, ax8 = plt.subplots(figsize=(3, 2))
-    revenue_rev_type.plot(kind="barh", ax=ax8)
-    ax8.set_xlabel("Total Revenue", fontsize=6)
-    ax8.set_ylabel("Revenue Type", fontsize=6)
-    ax8.set_title("Top Revenue Types by Total Revenue", fontsize=8)
+   # 8. Distribution of Credit Score by Segmentation
+    st.subheader("Distribution of Credit Score by Segmentation")
+    Credit_Score_Category = filtered_df.groupby("Credit_Score_Category")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    fig8, ax8 = plt.subplots(figsize=(7, 4))
+    Credit_Score_Category.plot(kind="barh", width=0.7, ax=ax8)
+    ax8.set_title("Distribution of Credit Score by Segmentation", fontsize=8)
     ax8.tick_params(axis='y', labelsize=6)
     ax8.tick_params(axis='x', labelsize=6)
 
     # Add data labels
     for p in ax8.patches:
-        ax8.annotate(format_revenue(p.get_width()), (p.get_x() + p.get_width(), p.get_y() + p.get_height() / 2.),
-                     ha='left', va='center', fontsize=6, xytext=(5, 0), textcoords='offset points')
-
-    st.pyplot(fig8)
-
-    # Offshore Region Revenue (use df instead of filtered_df)
-    st.subheader("Top 10 Offshore Regions by Revenue")
-    df = df.dropna(subset=["Offshore Region"])  # Changed to df
-    offshore_revenue = df.groupby("Offshore Region")["Revenue"].sum().sort_values(ascending=False).head(10)  # Changed to df
+        ax8.annotate(format_Credit_Score(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
+                     ha='center', va='center', fontsize=6, xytext=(0, 5), textcoords='offset points')
+        
+    # 9. Distribution of y column(Approved Flag)
+    st.subheader("Distribution of y column(Approved Flag)")
+    Approved_Flag = filtered_df.groupby("Approved_Flag")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
     fig9, ax9 = plt.subplots(figsize=(7, 4))
-    offshore_revenue.plot(kind="bar", ax=ax9)
-    ax9.set_xlabel("Offshore Region", fontsize=6)
-    ax9.set_ylabel("Total Revenue", fontsize=6)
-    ax9.set_title("Top 10 Offshore Regions by Revenue", fontsize=8)
+    Approved_Flag.plot(kind="barh", width=0.7, ax=ax9)
+    ax9.set_title("Distribution of y column(Approved Flag)", fontsize=8)
     ax9.tick_params(axis='y', labelsize=6)
     ax9.tick_params(axis='x', labelsize=6)
 
     # Add data labels
     for p in ax9.patches:
-        ax9.annotate(format_revenue(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
+        ax9.annotate(format_Flag(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
                      ha='center', va='center', fontsize=6, xytext=(0, 5), textcoords='offset points')
 
-    st.pyplot(fig9)
+    # 10. Applicants with a high percentage of missed payments
+    st.subheader("Applicants with a high percentage of missed payments)")
+    Missed_Payments = ( df1[df1['Tot_Missed_Pmnt'] != 0] .groupby('Tot_Missed_Pmnt')['PROSPECTID'] .count() .sort_values(ascending=False) .to_frame()).head(5)
+    fig10, ax10 = plt.subplots(figsize=(7, 4))
+    Missed_Payments.plot(kind="barh", width=0.7, ax=ax10)
+    ax10.set_title("Applicants with a high percentage of missed payments", fontsize=8)
+    ax10.tick_params(axis='y', labelsize=6)
+    ax10.tick_params(axis='x', labelsize=6)
+
+    # Add data labels
+    for p in ax10.patches:
+        ax10.annotate(format_Flag(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
+                     ha='center', va='center', fontsize=6, xytext=(0, 5), textcoords='offset points')
+
+    # 11.  Applicants who opened multiple new accounts in the last 6 months
+    st.subheader("Applicants who opened multiple new accounts in the last 6 months")
+    new_Multiple_Accounts = filtered_df.groupby("Total_TL_opened_L6M")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    fig11, ax11 = plt.subplots(figsize=(7, 4))
+    new_Multiple_Accounts.plot(kind="barh", width=0.7, ax=ax11)
+    ax11.set_title(" Applicants who opened multiple new accounts in the last 6 months", fontsize=8)
+    ax11.tick_params(axis='y', labelsize=6)
+    ax11.tick_params(axis='x', labelsize=6)
+
+    # Add data labels
+    for p in ax11.patches:
+        ax11.annotate(format_Flag(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
+                     ha='center', va='center', fontsize=6, xytext=(0, 5), textcoords='offset points')
+
+     # 12. Applicants who Closed multiple accounts in last 6 months
+    st.subheader("Applicants who Closed multiple accounts in last 6 months")
+    Closed_Multiple_Accounts = filtered_df.groupby("Tot_TL_closed_L6M")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    fig12, ax12 = plt.subplots(figsize=(7, 4))
+    Closed_Multiple_Accounts.plot(kind="barh", width=0.7, ax=ax12)
+    ax12.set_title("Applicants who Closed multiple accounts in last 6 months", fontsize=8)
+    ax12.tick_params(axis='y', labelsize=6)
+    ax12.tick_params(axis='x', labelsize=6)
+
+    # Add data labels
+    for p in ax12.patches:
+        ax12.annotate(format_Flag(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
+                     ha='center', va='center', fontsize=6, xytext=(0, 5), textcoords='offset points')
+
