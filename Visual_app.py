@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import zipfile
+import os
 from io import BytesIO
 
 # --- Login Section ---
@@ -15,6 +16,25 @@ def login():
             st.session_state["authenticated"] = True
         else:
             st.error("Invalid username or password")
+
+# Helper functions for annotations
+def format_education(value):
+    return f"{int(value):,}"
+
+def format_MaritalStatus(value):
+    return f"{int(value):,}"
+
+def format_Loan_Type(value):
+    return f"{int(value):,}"
+
+def format_Income(value):
+    return f"{int(value):,}"
+
+def format_Credit_Score(value):
+    return f"{int(value):,}"
+
+def format_Flag(value):
+    return f"{int(value):,}"
 
 # Check session state
 if "authenticated" not in st.session_state:
@@ -39,80 +59,63 @@ else:
     zip_file_path = os.path.join(os.getcwd(), "Dataset 1.zip")
     df1, df2 = load_data_from_zip(zip_file_path)
 
-        # Sidebar filters
-        st.sidebar.header("Filter Data")
-        EDUCATION = sorted(df2["Education Level"].dropna().unique())
-        GENDER = sorted(df2["Gender"].dropna().unique())
-        MARITALSTATUS = sorted(df2["MaritalStatus"].dropna().unique())
-        LOAN_TYPE = sorted(df2["Loan Type"].dropna().unique())
-        RISK_CATEGORY = sorted(df1["Risk_Category"].dropna().unique())
-        CREDIT_SCORE_CATEGORY = sorted(df1["Credit_Score_Category"].dropna().unique())
+    # Sidebar filters
+    st.sidebar.header("Filter Data")
+    EDUCATION = sorted(df2["Education Level"].dropna().unique())
+    GENDER = sorted(df2["Gender"].dropna().unique())
+    MARITALSTATUS = sorted(df2["MaritalStatus"].dropna().unique())
+    LOAN_TYPE = sorted(df2["Loan Type"].dropna().unique())
 
-        selected_education = st.sidebar.multiselect("📚 Education Level", EDUCATION, default=EDUCATION)
-        selected_gender = st.sidebar.multiselect("🌍 Gender", GENDER, default=GENDER)
-        selected_marital_status = st.sidebar.multiselect("💍 Marital Status", MARITALSTATUS, default=MARITALSTATUS)
-        selected_loan_type = st.sidebar.multiselect("🏦 Loan Type", LOAN_TYPE, default=LOAN_TYPE)
+    selected_education = st.sidebar.multiselect("📚 Education Level", EDUCATION, default=EDUCATION)
+    selected_gender = st.sidebar.multiselect("🌍 Gender", GENDER, default=GENDER)
+    selected_marital_status = st.sidebar.multiselect("💍 Marital Status", MARITALSTATUS, default=MARITALSTATUS)
+    selected_loan_type = st.sidebar.multiselect("🏦 Loan Type", LOAN_TYPE, default=LOAN_TYPE)
 
-        # Filter df2
-        filtered_df2 = df2[
-            df2["Education Level"].isin(selected_education) &
-            df2["Gender"].isin(selected_gender) &
-            df2["MaritalStatus"].isin(selected_marital_status) &
-            df2["Loan Type"].isin(selected_loan_type)
-        ]
+    # Filter df2
+    filtered_df2 = df2[
+        df2["Education Level"].isin(selected_education) &
+        df2["Gender"].isin(selected_gender) &
+        df2["MaritalStatus"].isin(selected_marital_status) &
+        df2["Loan Type"].isin(selected_loan_type)
+    ]
 
-        st.subheader("Filtered Data Preview")
-        st.dataframe(filtered_df2)
-
-        # Utility function
-        def format_revenue(value):
-            if value >= 1e9:
-                return f"{value/1e9:.2f}B"
-            elif value >= 1e6:
-                return f"{value/1e6:.2f}M"
-            else:
-                return f"{value:.0f}"
+    st.subheader("Filtered Data Preview")
+    st.dataframe(filtered_df2)
 
     # 1. Distribution of Education Level
     st.subheader("Distribution of Education Level")
-    Education_Level = filtered_df2.groupby("EDUCATION")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    Education_Level = filtered_df2.groupby("Education Level")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig1, ax1 = plt.subplots(figsize=(7, 4))
-    Education_Level.plot(kind="bar", width=0.7, ax=ax1)
+    ax1.bar(Education_Level["Education Level"], Education_Level["PROSPECTID"])
     ax1.set_title("Distribution of Education Level", fontsize=8)
     ax1.tick_params(axis='y', labelsize=6)
-    ax1.tick_params(axis='x', labelsize=6)
-
-    # Add data labels
+    ax1.tick_params(axis='x', labelsize=6, rotation=45)
     for p in ax1.patches:
         ax1.annotate(format_education(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
                      ha='center', va='center', fontsize=6, xytext=(0, 5), textcoords='offset points')
-
     st.pyplot(fig1)
-
 
     # 2. Distribution of Gender
     st.subheader("Distribution of Gender")
-    Gender_Distribution = filtered_df2.groupby("GENDER")["PROSPECTID"].sum()  # Changed to df
+    Gender_Distribution = filtered_df2["Gender"].value_counts()
     fig2, ax2 = plt.subplots(figsize=(2, 2))
-    ax2.pie(Gender_Distribution, labels=Gender_Distribution.index, autopct="%.2f%%", startangle=90, wedgeprops={'edgecolor': 'white'})
+    ax2.pie(Gender_Distribution, labels=Gender_Distribution.index, autopct="%.2f%%", startangle=90,
+            wedgeprops={'edgecolor': 'white'})
     ax2.axis("equal")
     ax2.set_title("Distribution of Gender", fontsize=8)
     st.pyplot(fig2)
 
     # 3. Distribution of Maritalstatus
     st.subheader("Distribution of Maritalstatus")
-    MaritalStatus = filtered_df2.groupby("MARITALSTATUS")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    MaritalStatus = filtered_df2["MaritalStatus"].value_counts().reset_index()
     fig3, ax3 = plt.subplots(figsize=(7, 4))
-    MaritalStatus.plot(kind="barh", width=0.7, ax=ax3)
+    ax3.barh(MaritalStatus["index"], MaritalStatus["MaritalStatus"])
     ax3.set_title("Distribution of Maritalstatus", fontsize=8)
     ax3.tick_params(axis='y', labelsize=6)
     ax3.tick_params(axis='x', labelsize=6)
-
-    # Add data labels
     for p in ax3.patches:
-        ax3.annotate(format_MaritalStatus(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()),
-                     ha='center', va='center', fontsize=6, xytext=(0, 5), textcoords='offset points')
-
+        ax3.annotate(format_MaritalStatus(p.get_width()), (p.get_width(), p.get_y() + p.get_height() / 2.),
+                     ha='left', va='center', fontsize=6, xytext=(5, 0), textcoords='offset points')
     st.pyplot(fig3)
 
     # 4. Distribution of Loan Type
