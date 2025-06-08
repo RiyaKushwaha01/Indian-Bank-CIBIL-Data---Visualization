@@ -30,18 +30,16 @@ if not st.session_state["authenticated"]:
     login()
 else:
     st.title("Indian Bank & CIBIL Data - EDA")
+    
+# Load data from local Excel files
+@st.cache_data
+def load_data_from_local():
+    df1 = pd.read_excel("Internal_Bank_Dataset.xlsx")
+    df2 = pd.read_excel("External_Cibil_Dataset.xlsx")
+    return df1, df2
 
-    # Load data from local ZIP file
-    @st.cache_data
-    def load_data_from_zip(zip_path):
-        with zipfile.ZipFile(zip_path, 'r') as z:
-            file_names = z.namelist()
-            df1 = pd.read_excel(z.open([f for f in file_names if "Internal_Bank_Dataset" in f][0]))
-            df2 = pd.read_excel(z.open([f for f in file_names if "External_Cibil_Dataset" in f][0]))
-        return df1, df2
-
-    zip_file_path = os.path.join(os.getcwd(), "Dataset 1.zip")
-    df1, df2 = load_data_from_zip(zip_file_path)
+# Call the function
+df1, df2 = load_data_from_local()
 
     # Sidebar filters
     st.sidebar.header("Filter Data")
