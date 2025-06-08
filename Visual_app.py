@@ -73,19 +73,9 @@ else:
             else:
                 return f"{value:.0f}"
 
-        # Example plot
-        st.subheader("Distribution of Education Level")
-        edu_plot = filtered_df2.groupby("Education Level")["PROSPECTID"].count().reset_index()
-        fig1, ax1 = plt.subplots()
-        sns.barplot(data=edu_plot, x="Education Level", y="PROSPECTID", ax=ax1)
-        for p in ax1.patches:
-            ax1.annotate(format_revenue(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()), 
-                         ha='center', va='center', fontsize=8, xytext=(0, 5), textcoords='offset points')
-        st.pyplot(fig1)
-
     # 1. Distribution of Education Level
     st.subheader("Distribution of Education Level")
-    Education_Level = filtered_df.groupby("EDUCATION")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    Education_Level = filtered_df2.groupby("EDUCATION")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
     fig1, ax1 = plt.subplots(figsize=(7, 4))
     Education_Level.plot(kind="bar", width=0.7, ax=ax1)
     ax1.set_title("Distribution of Education Level", fontsize=8)
@@ -102,7 +92,7 @@ else:
 
     # 2. Distribution of Gender
     st.subheader("Distribution of Gender")
-    Gender_Distribution = filtered_df.groupby("GENDER")["PROSPECTID"].sum()  # Changed to df
+    Gender_Distribution = filtered_df2.groupby("GENDER")["PROSPECTID"].sum()  # Changed to df
     fig2, ax2 = plt.subplots(figsize=(2, 2))
     ax2.pie(Gender_Distribution, labels=Gender_Distribution.index, autopct="%.2f%%", startangle=90, wedgeprops={'edgecolor': 'white'})
     ax2.axis("equal")
@@ -111,7 +101,7 @@ else:
 
     # 3. Distribution of Maritalstatus
     st.subheader("Distribution of Maritalstatus")
-    MaritalStatus = filtered_df.groupby("MARITALSTATUS")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    MaritalStatus = filtered_df2.groupby("MARITALSTATUS")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
     fig3, ax3 = plt.subplots(figsize=(7, 4))
     MaritalStatus.plot(kind="barh", width=0.7, ax=ax3)
     ax3.set_title("Distribution of Maritalstatus", fontsize=8)
@@ -127,7 +117,7 @@ else:
 
     # 4. Distribution of Loan Type
     st.subheader("Distribution of Loan Type")
-    Loan_Type = filtered_df.groupby("first_prod_enq2")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    Loan_Type = filtered_df2.groupby("first_prod_enq2")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
     fig4, ax4 = plt.subplots(figsize=(7, 4))
     Loan_Type.plot(kind="barh", width=0.7, ax=ax4)
     ax4.set_title("Distribution of Loan Type", fontsize=8)
