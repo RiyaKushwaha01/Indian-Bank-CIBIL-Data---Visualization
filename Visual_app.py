@@ -39,12 +39,12 @@ else:
         # Sidebar filters
         st.sidebar.header("Filter Data")
 
-        EDUCATION = sorted(df["Education Level"].dropna().unique())
-        GENDER = sorted(df["Gender"].dropna().unique())
-        MARITALSTATUS = sorted(df["MaritalStatus"].dropna().unique())
-        LOAN_TYPE = sorted(df["Loan Type"].dropna().unique())
-        RISK_CATEGORY = sorted(df["Risk Category"].dropna().unique())
-        CREDIT_SCORE_CATEGORY = sorted(df["Credit Score Category"].dropna().unique())
+        EDUCATION = sorted(df2["Education Level"].dropna().unique())
+        GENDER = sorted(df2["Gender"].dropna().unique())
+        MARITALSTATUS = sorted(df2["MaritalStatus"].dropna().unique())
+        LOAN_TYPE = sorted(df2["Loan Type"].dropna().unique())
+        RISK_CATEGORY = sorted(df1["Risk Category"].dropna().unique())
+        CREDIT_SCORE_CATEGORY = sorted(df1["Credit Score Category"].dropna().unique())
 
         with st.sidebar.expander("📚 Education Level", expanded=True):
             selected_education = st.multiselect("Select Education Level", options=EDUCATION, default=EDUCATION)
@@ -65,13 +65,13 @@ else:
             selected_credit_score_category = st.multiselect("Select Credit Score Category", options=CREDIT_SCORE_CATEGORY, default=CREDIT_SCORE_CATEGORY)
 
         # ✅ Apply filters
-        filtered_df = df[
-            df["Education Level"].isin(selected_education) &
-            df["Gender"].isin(selected_gender) &
-            df["MaritalStatus"].isin(selected_marital_status) &
-            df["Loan Type"].isin(selected_loan_type) &
-            df["Risk Category"].isin(selected_risk_category) &
-            df["Credit Score Category"].isin(selected_credit_score_category)
+        filtered_df = df2[
+            df2["Education Level"].isin(selected_education) &
+            df2["Gender"].isin(selected_gender) &
+            df2["MaritalStatus"].isin(selected_marital_status) &
+            df2["Loan Type"].isin(selected_loan_type) &
+            df1["Risk Category"].isin(selected_risk_category) &
+            df1["Credit Score Category"].isin(selected_credit_score_category)
         ]
 
         st.subheader("Filtered Dataset")
@@ -106,7 +106,7 @@ else:
 
     # 2. Distribution of Gender
     st.subheader("Distribution of Gender")
-    Gender_Distribution = df.groupby("GENDER")["PROSPECTID"].sum()  # Changed to df
+    Gender_Distribution = filtered_df.groupby("GENDER")["PROSPECTID"].sum()  # Changed to df
     fig2, ax2 = plt.subplots(figsize=(2, 2))
     ax2.pie(Gender_Distribution, labels=Gender_Distribution.index, autopct="%.2f%%", startangle=90, wedgeprops={'edgecolor': 'white'})
     ax2.axis("equal")
@@ -145,7 +145,7 @@ else:
 
     # 5.  Top 5 Income of Applicants
     st.subheader("Top 5 Income of Applicants")
-    Applicants_Income = filtered_df.groupby("NETMONTHLYINCOME")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    Applicants_Income = df2.groupby("NETMONTHLYINCOME")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
     fig5, ax5 = plt.subplots(figsize=(7, 4))
     Applicants_Income.plot(kind="bar", width=0.7, ax=ax5)
     ax5.set_title("Top 5 Income of Applicants", fontsize=8)
@@ -159,7 +159,7 @@ else:
 
     # 6. Top 10 Credit Score
     st.subheader("Top 10 Credit Scores")
-    Credit_Score = filtered_df.groupby("Credit_Score")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    Credit_Score = df2.groupby("Credit_Score")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
     fig6, ax6 = plt.subplots(figsize=(7, 4))
     Credit_Score.plot(kind="bar", width=0.7, ax=ax6)
     ax6.set_title("Top 5 Income of Applicants", fontsize=8)
@@ -173,7 +173,7 @@ else:
 
     # 7. Distribution of Risk Category
     st.subheader("Distribution of Risk Category")
-    Risk_Category = df.groupby("Risk_Category")["PROSPECTID"].sum()  # Changed to df
+    Risk_Category = df1.groupby("Risk_Category")["PROSPECTID"].sum()  # Changed to df
     fig7, ax7 = plt.subplots(figsize=(2, 2))
     ax7.pie(Risk_Category, labels=Risk_Category.index, autopct="%.2f%%", startangle=90, wedgeprops={'edgecolor': 'white'})
     ax7.axis("equal")
@@ -182,7 +182,7 @@ else:
 
    # 8. Distribution of Credit Score by Segmentation
     st.subheader("Distribution of Credit Score by Segmentation")
-    Credit_Score_Category = filtered_df.groupby("Credit_Score_Category")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    Credit_Score_Category = df1.groupby("Credit_Score_Category")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
     fig8, ax8 = plt.subplots(figsize=(7, 4))
     Credit_Score_Category.plot(kind="barh", width=0.7, ax=ax8)
     ax8.set_title("Distribution of Credit Score by Segmentation", fontsize=8)
@@ -196,7 +196,7 @@ else:
         
     # 9. Distribution of y column(Approved Flag)
     st.subheader("Distribution of y column(Approved Flag)")
-    Approved_Flag = filtered_df.groupby("Approved_Flag")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    Approved_Flag = df2.groupby("Approved_Flag")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
     fig9, ax9 = plt.subplots(figsize=(7, 4))
     Approved_Flag.plot(kind="barh", width=0.7, ax=ax9)
     ax9.set_title("Distribution of y column(Approved Flag)", fontsize=8)
@@ -224,7 +224,7 @@ else:
 
     # 11.  Applicants who opened multiple new accounts in the last 6 months
     st.subheader("Applicants who opened multiple new accounts in the last 6 months")
-    new_Multiple_Accounts = filtered_df.groupby("Total_TL_opened_L6M")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    new_Multiple_Accounts = df1.groupby("Total_TL_opened_L6M")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
     fig11, ax11 = plt.subplots(figsize=(7, 4))
     new_Multiple_Accounts.plot(kind="barh", width=0.7, ax=ax11)
     ax11.set_title(" Applicants who opened multiple new accounts in the last 6 months", fontsize=8)
@@ -238,7 +238,7 @@ else:
 
      # 12. Applicants who Closed multiple accounts in last 6 months
     st.subheader("Applicants who Closed multiple accounts in last 6 months")
-    Closed_Multiple_Accounts = filtered_df.groupby("Tot_TL_closed_L6M")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
+    Closed_Multiple_Accounts = df1.groupby("Tot_TL_closed_L6M")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
     fig12, ax12 = plt.subplots(figsize=(7, 4))
     Closed_Multiple_Accounts.plot(kind="barh", width=0.7, ax=ax12)
     ax12.set_title("Applicants who Closed multiple accounts in last 6 months", fontsize=8)
