@@ -92,7 +92,7 @@ else:
     marital_data.columns = ["MARITALSTATUS", "Count"]
     fig3, ax3 = plt.subplots(figsize=(7, 4))
     bars = ax3.barh(marital_data["MARITALSTATUS"], marital_data["Count"], color='lightgreen', edgecolor='black')
-    ax3.set_title("Marital Status Distribution", fontsize=10)
+    ax3.set_title("Distribution of MartitalStatus", fontsize=10)
     for bar in bars:
         ax3.annotate(format_value(bar.get_width()),
                      xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
