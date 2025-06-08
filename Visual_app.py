@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import zipfile
 import os
-from io import BytesIO
 
 # --- Login Section ---
 def login():
@@ -16,11 +15,11 @@ def login():
         else:
             st.error("Invalid username or password")
 
-# Helper functions for annotations
+# Helper function for annotations
 def format_value(value):
     return f"{int(value):,}"
 
-# Check session state
+# Initialize authentication state
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
 
@@ -42,10 +41,15 @@ else:
     zip_file_path = os.path.join(os.getcwd(), "Dataset 1.zip")
     df1, df2 = load_data_from_zip(zip_file_path)
 
+    # Debug: Uncomment to check actual columns in df2
+    # st.write(df2.columns.tolist())
+
     # Sidebar filters
     st.sidebar.header("Filter Data")
+
+    # Correct column names (case sensitive)
     EDUCATION = sorted(df2["EDUCATION"].dropna().unique())
-    GENDER = sorted(df2["Gender"].dropna().unique())
+    GENDER = sorted(df2["GENDER"].dropna().unique())  # Fixed from "Gender" to "GENDER"
     MARITALSTATUS = sorted(df2["MARITALSTATUS"].dropna().unique())
     LOAN_TYPE = sorted(df2["first_prod_enq2"].dropna().unique())
 
@@ -56,7 +60,7 @@ else:
 
     filtered_df2 = df2[
         df2["EDUCATION"].isin(selected_education) &
-        df2["Gender"].isin(selected_gender) &
+        df2["GENDER"].isin(selected_gender) &   # fixed here too
         df2["MARITALSTATUS"].isin(selected_marital_status) &
         df2["first_prod_enq2"].isin(selected_loan_type)
     ]
@@ -78,7 +82,7 @@ else:
 
     # Gender Pie
     st.subheader("Gender Distribution")
-    gender_data = filtered_df2["Gender"].value_counts()
+    gender_data = filtered_df2["GENDER"].value_counts()  # fixed here too
     fig2, ax2 = plt.subplots(figsize=(3, 3))
     ax2.pie(gender_data, labels=gender_data.index, autopct="%.2f%%", startangle=90)
     ax2.axis("equal")
