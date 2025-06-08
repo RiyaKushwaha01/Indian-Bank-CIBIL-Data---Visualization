@@ -80,15 +80,15 @@ else:
             return f"${value/1e6:.2f}M"
         else:
             return f"${value:.2f}"
-
-    # Revenue Trends
-    st.subheader("Revenue Trends Over the Years")
-    revenue_trends = filtered_df.groupby("Calendar Year")["Revenue"].sum().reset_index()
+            
+    # 1. Distribution of Education Level
+    st.subheader("Distribution of Education Level")
+    Education_Level = filtered_df.groupby("EDUCATION")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
     fig1, ax1 = plt.subplots(figsize=(6, 3))
     sns.lineplot(data=revenue_trends, x="Calendar Year", y="Revenue", ax=ax1, marker='o')
-    ax1.set_title("Revenue Trends Over the Years", fontsize=8)
-    ax1.set_xlabel("Year", fontsize=6)
-    ax1.set_ylabel("Revenue", fontsize=6)
+    ax1.set_title("Distribution of Education Level", fontsize=8)
+    ax1.set_xlabel("Education Level", fontsize=6)
+    ax1.set_ylabel("Applicants Count", fontsize=6)
     ax1.tick_params(axis='y', labelsize=6)
     ax1.tick_params(axis='x', labelsize=6)
 
