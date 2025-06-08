@@ -74,6 +74,9 @@ else:
         ax1.annotate(format_value(p.get_height()), (p.get_x() + p.get_width() / 2, p.get_height()),
                      ha='center', va='bottom', fontsize=6)
     st.pyplot(fig1)
+    plt.close(fig1)  # Close the figure after rendering to avoid memory issues
+    except Exception as e:
+        st.error(f"An error occurred while plotting the graph: {e}")
 
     # 2. Gender Pie
     st.subheader("Gender Distribution")
