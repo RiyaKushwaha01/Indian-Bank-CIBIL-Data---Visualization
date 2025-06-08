@@ -34,59 +34,55 @@ else:
             df2 = pd.read_excel(z.open([f for f in file_names if "External_Cibil_Dataset" in f][0]))
         return df1, df2
 
-      
+    # Upload ZIP
+    uploaded_file = st.file_uploader("Upload ZIP file", type=["zip"])
+    if uploaded_file:
+        df1, df2 = load_data_from_zip(uploaded_file)
 
         # Sidebar filters
         st.sidebar.header("Filter Data")
-
         EDUCATION = sorted(df2["Education Level"].dropna().unique())
         GENDER = sorted(df2["Gender"].dropna().unique())
         MARITALSTATUS = sorted(df2["MaritalStatus"].dropna().unique())
         LOAN_TYPE = sorted(df2["Loan Type"].dropna().unique())
-        RISK_CATEGORY = sorted(df1["Risk Category"].dropna().unique())
-        CREDIT_SCORE_CATEGORY = sorted(df1["Credit Score Category"].dropna().unique())
+        RISK_CATEGORY = sorted(df1["Risk_Category"].dropna().unique())
+        CREDIT_SCORE_CATEGORY = sorted(df1["Credit_Score_Category"].dropna().unique())
 
-        with st.sidebar.expander("📚 Education Level", expanded=True):
-            selected_education = st.multiselect("Select Education Level", options=EDUCATION, default=EDUCATION)
+        selected_education = st.sidebar.multiselect("📚 Education Level", EDUCATION, default=EDUCATION)
+        selected_gender = st.sidebar.multiselect("🌍 Gender", GENDER, default=GENDER)
+        selected_marital_status = st.sidebar.multiselect("💍 Marital Status", MARITALSTATUS, default=MARITALSTATUS)
+        selected_loan_type = st.sidebar.multiselect("🏦 Loan Type", LOAN_TYPE, default=LOAN_TYPE)
 
-        with st.sidebar.expander("🌍 Gender", expanded=True):
-            selected_gender = st.multiselect("Select Gender", options=GENDER, default=GENDER)
-
-        with st.sidebar.expander("💍 Marital Status", expanded=True):
-            selected_marital_status = st.multiselect("Select Marital Status", options=MARITALSTATUS, default=MARITALSTATUS)
-
-        with st.sidebar.expander("🏦 Loan Type", expanded=True):
-            selected_loan_type = st.multiselect("Select Loan Type", options=LOAN_TYPE, default=LOAN_TYPE)
-
-        with st.sidebar.expander("⚠️ Risk Category", expanded=True):
-            selected_risk_category = st.multiselect("Select Risk Category", options=RISK_CATEGORY, default=RISK_CATEGORY)
-
-        with st.sidebar.expander("💳 Credit Score Category", expanded=True):
-            selected_credit_score_category = st.multiselect("Select Credit Score Category", options=CREDIT_SCORE_CATEGORY, default=CREDIT_SCORE_CATEGORY)
-
-        # ✅ Apply filters
-        filtered_df = df2[
+        # Filter df2
+        filtered_df2 = df2[
             df2["Education Level"].isin(selected_education) &
             df2["Gender"].isin(selected_gender) &
             df2["MaritalStatus"].isin(selected_marital_status) &
-            df2["Loan Type"].isin(selected_loan_type) &
-            df1["Risk Category"].isin(selected_risk_category) &
-            df1["Credit Score Category"].isin(selected_credit_score_category)
+            df2["Loan Type"].isin(selected_loan_type)
         ]
 
-        st.subheader("Filtered Dataset")
-        st.dataframe(filtered_df)
+        st.subheader("Filtered Data Preview")
+        st.dataframe(filtered_df2)
 
+        # Utility function
+        def format_revenue(value):
+            if value >= 1e9:
+                return f"{value/1e9:.2f}B"
+            elif value >= 1e6:
+                return f"{value/1e6:.2f}M"
+            else:
+                return f"{value:.0f}"
 
-    # Function to format numbers in millions or billions
-    def format_revenue(value):
-        if value >= 1e9:
-            return f"${value/1e9:.2f}B"
-        elif value >= 1e6:
-            return f"${value/1e6:.2f}M"
-        else:
-            return f"${value:.2f}"
-            
+        # Example plot
+        st.subheader("Distribution of Education Level")
+        edu_plot = filtered_df2.groupby("Education Level")["PROSPECTID"].count().reset_index()
+        fig1, ax1 = plt.subplots()
+        sns.barplot(data=edu_plot, x="Education Level", y="PROSPECTID", ax=ax1)
+        for p in ax1.patches:
+            ax1.annotate(format_revenue(p.get_height()), (p.get_x() + p.get_width() / 2., p.get_height()), 
+                         ha='center', va='center', fontsize=8, xytext=(0, 5), textcoords='offset points')
+        st.pyplot(fig1)
+
     # 1. Distribution of Education Level
     st.subheader("Distribution of Education Level")
     Education_Level = filtered_df.groupby("EDUCATION")["PROSPECTID"].sum().sort_values(ascending = False).reset_index()
