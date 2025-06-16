@@ -177,7 +177,9 @@ else:
     )
     ax7.axis("equal")  # Equal aspect ratio to maintain circle
     st.pyplot(fig7, bbox_inches="tight")
+    st.image(image, width=100)
     plt.close(fig7)
+    
 
 
     # Create Credit Score Category column
