@@ -216,30 +216,24 @@ else:
     flag_data = df2.groupby("Approved_Flag")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig9, ax9 = plt.subplots(figsize=(6, 3))
     bars = ax9.barh(flag_data["Approved_Flag"], flag_data["PROSPECTID"], color='brown', edgecolor='black')
+
     ax9.set_title("Approved Flag", fontsize=10)
-    # Set x-axis limit slightly higher than max width to avoid label clipping
     max_width = flag_data["PROSPECTID"].max()
-    ax9.set_xlim(0, max_width * 1.1)  # Add 10% padding
-    # Annotate each bar
+    ax9.set_xlim(0, max_width * 1.15)  # Add 15% padding for better label spacing
+    ax9.tick_params(axis='y', labelsize=6)
+    ax9.tick_params(axis='x', labelsize=6)
+    # Annotate each bar (always to the right of the bar for visibility)
     for bar in bars:
         width = bar.get_width()
-        label = f"{int(width):,}"
+        label_x_pos = width + (max_width * 0.015)  # Offset to the right of the bar
+        ax9.annotate(f"{int(width):,}",
+                     xy=(label_x_pos, bar.get_y() + bar.get_height() / 2),
+                     ha='left', va='center', fontsize=7, color='black')
 
-        if width > max_width * 0.1:
-            # Place inside bar if long enough
-            ax9.annotate(label,
-                         xy=(width - (max_width * 0.02), bar.get_y() + bar.get_height() / 2),
-                         ha='right', va='center', fontsize=7, color='white')
-        else:
-            ax9.annotate(label,
-                         xy=(width + (max_width * 0.01), bar.get_y() + bar.get_height() / 2),
-                         ha='left', va='center', fontsize=7, color='black')
-
-    # Tight layout to avoid clipping
+    # Improve layout
     fig9.tight_layout()
     st.pyplot(fig9)
     plt.close(fig9)
-
 
     # 10. Top Missed Payments
     st.subheader("Top Missed Payments")
