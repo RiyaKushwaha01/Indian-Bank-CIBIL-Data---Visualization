@@ -193,14 +193,21 @@ else:
     st.subheader("Credit Score Segmentation")
     seg_data = df2.groupby("Credit_Score_Category")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
     fig8, ax8 = plt.subplots(figsize=(6, 3))
-    ax8.barh(seg_data["Credit_Score_Category"], seg_data["PROSPECTID"], color='teal', edgecolor='black')
+    bars = ax8.barh(seg_data["Credit_Score_Category"], seg_data["PROSPECTID"], color='teal', edgecolor='black')
     ax8.set_title("Credit Score Segmentation", fontsize=10)
+
+    # Annotate bars (data labels inside or at the end of the bars)
     for bar in bars:
-        ax8.annotate(format_value(bar.get_width()),
-                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
-                     ha='left', va='center', fontsize=6)
+        width = bar.get_width()
+        ax8.annotate(f"{width}",  # You can use format_value(width) if format_value is defined
+                     xy=(width, bar.get_y() + bar.get_height() / 2),
+                     xytext=(3, 0),  # Small offset to avoid overlap
+                     textcoords="offset points",
+                     ha='left', va='center', fontsize=6, color='black')
+
     st.pyplot(fig8)
     plt.close(fig8)
+
 
     # 9. Approved Flag Distribution
     st.subheader("Approved Flag Distribution")
