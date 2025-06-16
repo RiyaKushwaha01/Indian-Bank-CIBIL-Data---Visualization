@@ -195,13 +195,12 @@ else:
     fig8, ax8 = plt.subplots(figsize=(6, 3))
     bars = ax8.barh(seg_data["Credit_Score_Category"], seg_data["PROSPECTID"], color='teal', edgecolor='black')
     ax8.set_title("Credit Score Segmentation", fontsize=10)
-
-    # Add annotations (labels) to bars
     for bar in bars:
-        width = bar.get_width()
-        label_x_pos = width + 5  # shift slightly right of bar
-        ax8.text(label_x_pos, bar.get_y() + bar.get_height()/2,
-                f"{int(width)}", va='center', ha='left', fontsize=8, color='black')
+            height = bar.get_height()
+            ax1.annotate(format_value(height),
+                         xy=(bar.get_x() + bar.get_width() / 2, height),
+                         xytext=(0, 3), textcoords="offset points",
+                         ha='center', va='bottom', fontsize= 7)
 
     st.pyplot(fig8)
     plt.close(fig8)
