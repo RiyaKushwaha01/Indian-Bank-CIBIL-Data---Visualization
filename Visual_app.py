@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import zipfile
 import os
+import io
+from PIL import Image
 
 # Set page config at the very top before any Streamlit calls
 st.set_page_config(page_title="Visualizations", layout="wide")
@@ -172,17 +174,18 @@ else:
     # 7. Risk Category Pie
     st.subheader("Risk Category Distribution")
     risk_data = df1.groupby("Risk_Category")["PROSPECTID"].count()
-    fig7, ax7 = plt.subplots(figsize=(4, 6), dpi=300)
+    fig7, ax7 = plt.subplots(figsize=(1,1), dpi=600)
     ax7.pie( risk_data, labels=risk_data.index, autopct="%.2f%%", startangle=90, textprops={'fontsize': 8}, labeldistance=1.15, pctdistance=0.7)
     ax7.axis("equal")  # Keep it circular
+    # Save image to buffer
     buf = io.BytesIO()
-    fig7.savefig(buf, format="png", bbox_inches="tight")
+    fig7.savefig(buf, format="png", bbox_inches="tight", pad_inches=0.05)
     buf.seek(0)
     plt.close(fig7)
 
-    # Show small but sharp chart
+    # Display in Streamlit (shrink view size, not image quality)
     image = Image.open(buf)
-    st.image(image, width=100)  # ⬅️ Shrink display size (adjust 80–120 as needed)
+    st.image(image, use_column_width=False)  # auto size from fig, no upscaling
 
 
 
