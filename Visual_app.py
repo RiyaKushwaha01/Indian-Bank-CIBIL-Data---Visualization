@@ -87,7 +87,7 @@ else:
     st.subheader("Gender Distribution")
     gender_data = filtered_df2["GENDER"].value_counts()
     fig2, ax2 = plt.subplots(figsize=(1, 1))
-    ax2.pie(gender_data, labels=gender_data.index, autopct="%.2f%%", startangle=90, textprops={'fontsize': 8})
+    ax2.pie(gender_data, labels=gender_data.index, autopct="%.2f%%", startangle=90, textprops={'fontsize': 5})
     ax2.axis("equal")
     st.pyplot(fig2)
     plt.close(fig2)
