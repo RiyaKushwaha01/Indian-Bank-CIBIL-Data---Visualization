@@ -176,7 +176,7 @@ else:
     st.subheader("Risk Category Distribution")
     risk_data = df1.groupby("Risk_Category")["PROSPECTID"].count()
     fig7, ax7 = plt.subplots(figsize=(1,1), dpi=600)
-    ax7.pie( risk_data, labels=risk_data.index, autopct="%.2f%%", startangle=90, textprops={'fontsize':3}, labeldistance=1.15, pctdistance=0.7)
+    ax7.pie( risk_data, labels=risk_data.index, autopct="%.2f%%", startangle=90, textprops={'fontsize':2}, labeldistance=1.15, pctdistance=0.7)
     ax7.axis("equal")  # Keep it circular
     # Save image to buffer
     buf = io.BytesIO()
