@@ -171,8 +171,8 @@ else:
     # 7. Risk Category Pie
     st.subheader("Risk Category Distribution")
     risk_data = df1.groupby("Risk_Category")["PROSPECTID"].count()
-    fig7, ax7 = plt.subplots(figsize=(3, 3))
-    ax7.pie(risk_data, labels=risk_data.index, autopct="%.2f%%", startangle=90)
+    fig7, ax7 = plt.subplots(figsize=(1, 1))
+    ax7.pie(risk_data, labels=risk_data.index, autopct="%.2f%%", startangle=90,textprops={'fontsize': 3} )
     ax7.axis("equal")
     st.pyplot(fig7)
     plt.close(fig7)
