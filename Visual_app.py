@@ -126,17 +126,16 @@ else:
     bars = ax5.bar(income_data["NETMONTHLYINCOME"].astype(str), income_data["PROSPECTID"], color='magenta', edgecolor='black')
     ax5.set_title("Top 5 Income Applicants", fontsize=10)
 
-    # Annotate bars (data labels on top)
+    # Annotate bars (data labels in the middle)
     for bar in bars:
         height = bar.get_height()
         ax5.annotate(f"{height}",
-                     xy=(bar.get_x() + bar.get_width() / 2, height),
-                     xytext=(0, 3),  # offset
-                     textcoords="offset points",
-                     ha='center', va='bottom', fontsize=8)
-                     
+                     xy=(bar.get_x() + bar.get_width() / 2, height / 2),
+                     ha='center', va='center', fontsize=8, color='white')
+
     st.pyplot(fig5)
     plt.close(fig5)
+
 
     # 6. Top 10 Credit Scores
     st.subheader("Top 10 Credit Scores")
