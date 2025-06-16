@@ -219,14 +219,19 @@ else:
     fig9, ax9 = plt.subplots(figsize=(6, 3))
     bars = ax9.barh(flag_data["Approved_Flag"], flag_data["PROSPECTID"], color='brown', edgecolor='black')
     ax9.set_title("Approved Flag", fontsize=10)
-    # Annotate each bar
+    # Annotate each bar (inside if wide enough, else outside)
     for bar in bars:
         width = bar.get_width()
-        ax9.annotate(f"{int(width)}",  # or use format_value(width) if defined
-                     xy=(width, bar.get_y() + bar.get_height() / 2),
-                     xytext=(5, 0),  # small right offset
-                     textcoords="offset points",
-                     ha='left', va='center', fontsize=7, color='black')
+        label = f"{int(width):,}"
+
+        if width > 2000:  # place inside if bar is long enough
+            ax9.annotate(label,
+                         xy=(width - 1000, bar.get_y() + bar.get_height() / 2),
+                         ha='right', va='center', fontsize=7, color='white')
+        else:  # place outside if bar is short
+            ax9.annotate(label,
+                         xy=(width + 100, bar.get_y() + bar.get_height() / 2),
+                         ha='left', va='center', fontsize=7, color='black')
     # Show in Streamlit
     st.pyplot(fig9)
     plt.close(fig9)
