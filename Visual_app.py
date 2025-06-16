@@ -68,14 +68,14 @@ else:
     st.subheader("Distribution of Education")
     try:
         edu_data = filtered_df2.groupby("EDUCATION")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
-        fig1, ax1 = plt.subplots(figsize=(6, 3))
+        fig1, ax1 = plt.subplots(figsize=(8, 4))
         bars = ax1.bar(edu_data["EDUCATION"], edu_data["PROSPECTID"], color='skyblue', edgecolor='black')
-        ax1.set_title("Education Distribution", fontsize=8)
         ax1.tick_params(axis='x', labelrotation=45)
-        ax1.set_xlabel("Education Level", fontsize=6)
-        ax1.set_ylabel("Applicant's count", fontsize=6)
-        ax1.tick_params(axis='y', labelsize=6)
-        ax1.tick_params(axis='x', labelsize=6)
+        ax1.set_title("Education Distribution", fontsize=12)
+        ax1.set_xlabel("Education Level", fontsize=10)
+        ax1.set_ylabel("Applicant's count", fontsize=10)
+        ax1.tick_params(axis='y', labelsize=9)
+        ax1.tick_params(axis='x', labelsize=9, labelrotation=45)
         for bar in bars:
             height = bar.get_height()
             ax1.annotate(format_value(height),
