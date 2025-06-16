@@ -269,18 +269,27 @@ else:
 
     # 11. New Accounts Opened in Last 6 Months
     st.subheader("New Accounts Opened in Last 6 Months")
-    new_data = df1.groupby("Total_TL_opened_L6M")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
+    new_data = (df1.groupby("Total_TL_opened_L6M")["PROSPECTID"].count().sort_values(ascending=False).reset_index())
     fig11, ax11 = plt.subplots(figsize=(6, 3))
-    ax11.barh(new_data["Total_TL_opened_L6M"].astype(str), new_data["PROSPECTID"], color='navy', edgecolor='black')
+    bars = ax11.barh(new_data["Total_TL_opened_L6M"].astype(str), new_data["PROSPECTID"], color='navy', edgecolor='black')
     ax11.set_title("New Accounts in Last 6M", fontsize=10)
     ax11.tick_params(axis='y', labelsize=6)
     ax11.tick_params(axis='x', labelsize=6)
+
+    # X-axis limit padding
+    max_width = new_data["PROSPECTID"].max()
+    ax11.set_xlim(0, max_width * 1.15)
+    # Annotate bars
     for bar in bars:
-        ax11.annotate(format_value(bar.get_width()),
-                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
-                     ha='left', va='center', fontsize=6)
+        width = bar.get_width()
+        label_x_pos = width + (max_width * 0.015)
+        ax11.annotate(f"{int(width):,}",
+                      xy=(label_x_pos, bar.get_y() + bar.get_height() / 2),
+                      ha='left', va='center', fontsize=6, color='black')
+    fig11.tight_layout()
     st.pyplot(fig11)
     plt.close(fig11)
+
 
     # 12. Accounts Closed in Last 6 Months
     st.subheader("Accounts Closed in Last 6 Months")
