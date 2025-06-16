@@ -143,10 +143,12 @@ else:
     fig6, ax6 = plt.subplots(figsize=(6, 3))
     ax6.bar(score_data["Credit_Score"].astype(str), score_data["PROSPECTID"], color='purple', edgecolor='black')
     ax6.set_title("Credit Score Distribution", fontsize=10)
+    # Annotate bars (data labels in the middle)
     for bar in bars:
-        ax6.annotate(format_value(bar.get_width()),
-                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
-                     ha='left', va='center', fontsize=6)
+        height = bar.get_height()
+        ax6.annotate(f"{height}",
+                     xy=(bar.get_x() + bar.get_width() / 2, height / 2),
+                     ha='center', va='center', fontsize=8, color='white')
     st.pyplot(fig6)
     plt.close(fig6)
 
