@@ -133,7 +133,7 @@ else:
                      xy=(bar.get_x() + bar.get_width() / 2, height),
                      xytext=(0, 3),  # offset
                      textcoords="offset points",
-                     ha='center', va='bottom', fontsize=8
+                     ha='center', va='bottom', fontsize=8)
                      
     st.pyplot(fig5)
     plt.close(fig5)
