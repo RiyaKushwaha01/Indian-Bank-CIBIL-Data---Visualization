@@ -213,16 +213,24 @@ else:
 
     # 9. Approved Flag Distribution
     st.subheader("Approved Flag Distribution")
+    # Group data
     flag_data = df2.groupby("Approved_Flag")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
+    # Plot
     fig9, ax9 = plt.subplots(figsize=(6, 3))
-    ax9.barh(flag_data["Approved_Flag"], flag_data["PROSPECTID"], color='brown', edgecolor='black')
+    bars = ax9.barh(flag_data["Approved_Flag"], flag_data["PROSPECTID"], color='brown', edgecolor='black')
     ax9.set_title("Approved Flag", fontsize=10)
+    # Annotate each bar
     for bar in bars:
-        ax9.annotate(format_value(bar.get_width()),
-                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
-                     ha='left', va='center', fontsize=6)
+        width = bar.get_width()
+        ax9.annotate(f"{int(width)}",  # or use format_value(width) if defined
+                     xy=(width, bar.get_y() + bar.get_height() / 2),
+                     xytext=(5, 0),  # small right offset
+                     textcoords="offset points",
+                     ha='left', va='center', fontsize=7, color='black')
+    # Show in Streamlit
     st.pyplot(fig9)
     plt.close(fig9)
+
 
     # 10. Top Missed Payments
     st.subheader("Top Missed Payments")
