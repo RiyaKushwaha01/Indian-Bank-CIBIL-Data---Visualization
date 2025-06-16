@@ -87,7 +87,7 @@ else:
     st.subheader("Gender Distribution")
     gender_data = filtered_df2["GENDER"].value_counts()
     # Use a slightly larger figure for clarity, but render tightly
-    fig2, ax2 = plt.subplots(figsize=(1, 1), dpi=400)  # High DPI for sharpness
+    fig2, ax2 = plt.subplots(figsize=(1, 2), dpi=400)  # High DPI for sharpness
     ax2.pie(gender_data,labels=gender_data.index,autopct="%.2f%%",startangle=90,textprops={'fontsize': 3})  # Small but readable
     # Equal aspect ratio ensures a circle
     ax2.axis("equal")
@@ -171,7 +171,7 @@ else:
     # 7. Risk Category Pie
     st.subheader("Risk Category Distribution")
     risk_data = df1.groupby("Risk_Category")["PROSPECTID"].count()
-    fig7, ax7 = plt.subplots(figsize=(1, 1), dpi=300)  # Higher DPI for clarity
+    fig7, ax7 = plt.subplots(figsize=(1, 2), dpi=300)  # Higher DPI for clarity
     ax7.pie(risk_data,labels=risk_data.index,autopct="%.2f%%",startangle=90,textprops={'fontsize': 2},labeldistance=1.1,   # Push category labels out
     pctdistance=0.75     # Adjust position of % labels inside slices
     )
