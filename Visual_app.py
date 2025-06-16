@@ -29,7 +29,7 @@ if "authenticated" not in st.session_state:
 if not st.session_state["authenticated"]:
     login()
 else:
-    st.title("Indian Bank & CIBIL Data - EDA")
+    st.title("💳 EDA Dashboard: CIBIL Scores & Indian Banking Trends")
 
     # Load data from local ZIP file
     @st.cache_data
@@ -70,6 +70,8 @@ else:
         bars = ax1.bar(edu_data["EDUCATION"], edu_data["PROSPECTID"], color='skyblue', edgecolor='black')
         ax1.set_title("Education Distribution", fontsize=10)
         ax1.tick_params(axis='x', labelrotation=45)
+        ax1.tick_params(axis='y', labelsize=6)
+        ax1.tick_params(axis='x', labelsize=6)
         for bar in bars:
             height = bar.get_height()
             ax1.annotate(format_value(height),
