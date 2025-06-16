@@ -13,7 +13,7 @@ def login():
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
     if st.button("Login"):
-        if username == "User" and password == "User@123":
+        if username == "Riya" and password == "Riya@123":
             st.session_state["authenticated"] = True
         else:
             st.error("Invalid username or password")
@@ -66,7 +66,7 @@ else:
     st.subheader("Distribution of Education")
     try:
         edu_data = filtered_df2.groupby("EDUCATION")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
-        fig1, ax1 = plt.subplots(figsize=(7, 4))
+        fig1, ax1 = plt.subplots(figsize=(6, 3))
         bars = ax1.bar(edu_data["EDUCATION"], edu_data["PROSPECTID"], color='skyblue', edgecolor='black')
         ax1.set_title("Education Distribution", fontsize=10)
         ax1.tick_params(axis='x', labelrotation=45)
