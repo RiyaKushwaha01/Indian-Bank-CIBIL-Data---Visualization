@@ -86,15 +86,16 @@ else:
         st.error(f"An error occurred while plotting the Education Distribution graph: {e}")
 
     # 2. Gender Pie
+    st.markdown("<div style='margin-bottom: -20px;'></div>", unsafe_allow_html=True)
     st.subheader("Gender Distribution")
     gender_data = filtered_df2["GENDER"].value_counts()
-    # Use a slightly larger figure for clarity, but render tightly
-    fig2, ax2 = plt.subplots(figsize=(1, 2), dpi=400)  # High DPI for sharpness
-    ax2.pie(gender_data,labels=gender_data.index,autopct="%.2f%%",startangle=90,textprops={'fontsize': 3})  # Small but readable
-    # Equal aspect ratio ensures a circle
+    fig2, ax2 = plt.subplots(figsize=(2, 1.2), dpi=400)
+    ax2.pie(gender_data, labels=gender_data.index, autopct="%.2f%%", startangle=90, textprops={'fontsize': 3})
     ax2.axis("equal")
+    fig2.tight_layout(pad=0.5)  # Reduce inner padding
     st.pyplot(fig2, bbox_inches="tight")
     plt.close(fig2)
+
 
 
     # 3. Marital Status Distribution
