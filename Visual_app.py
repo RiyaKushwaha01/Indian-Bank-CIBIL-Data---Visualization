@@ -87,7 +87,7 @@ else:
     st.subheader("Gender Distribution")
     gender_data = filtered_df2["GENDER"].value_counts()
     fig2, ax2 = plt.subplots(figsize=(0.5, 0.5))
-    ax2.pie(gender_data, labels=gender_data.index, autopct="%.2f%%", startangle=90, textprops={'fontsize': 4})
+    ax2.pie(gender_data, labels=gender_data.index, autopct="%.2f%%", startangle=90, textprops={'fontsize': 2})
     ax2.axis("equal")
     st.pyplot(fig2)
     plt.close(fig2)
@@ -125,10 +125,14 @@ else:
     fig5, ax5 = plt.subplots(figsize=(6, 3))
     ax5.bar(income_data["NETMONTHLYINCOME"].astype(str), income_data["PROSPECTID"], color='magenta', edgecolor='black')
     ax5.set_title("Top 5 Income Applicants", fontsize=10)
+# Annotate bars (data labels on top)
     for bar in bars:
-        ax5.annotate(format_value(bar.get_width()),
-                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
-                     ha='left', va='center', fontsize= 7)
+    height = bar.get_height()
+    ax5.annotate(f"{height}",
+                 xy=(bar.get_x() + bar.get_width() / 2, height),
+                 xytext=(0, 3),  # offset
+                 textcoords="offset points",
+                 ha='center', va='bottom', fontsize=8)
     st.pyplot(fig5)
     plt.close(fig5)
 
