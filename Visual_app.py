@@ -87,7 +87,7 @@ else:
     st.subheader("Gender Distribution")
     gender_data = filtered_df2["GENDER"].value_counts()
     fig2, ax2 = plt.subplots(figsize=(1, 1))
-    ax2.pie(gender_data, labels=gender_data.index, autopct="%.2f%%", startangle=90, textprops={'fontsize': 5})
+    ax2.pie(gender_data, labels=gender_data.index, autopct="%.2f%%", startangle=90, textprops={'fontsize': 4})
     ax2.axis("equal")
     st.pyplot(fig2)
     plt.close(fig2)
@@ -115,7 +115,7 @@ else:
     for bar in bars:
         ax4.annotate(format_value(bar.get_width()),
                      xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
-                     ha='left', va='center', fontsize=6)
+                     ha='left', va='center', fontsize= 7)
     st.pyplot(fig4)
     plt.close(fig4)
 
@@ -128,7 +128,7 @@ else:
     for bar in bars:
         ax5.annotate(format_value(bar.get_width()),
                      xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
-                     ha='left', va='center', fontsize=6)
+                     ha='left', va='center', fontsize= 7)
     st.pyplot(fig5)
     plt.close(fig5)
 
