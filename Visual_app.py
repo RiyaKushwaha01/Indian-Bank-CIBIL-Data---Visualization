@@ -217,23 +217,29 @@ else:
     fig9, ax9 = plt.subplots(figsize=(6, 3))
     bars = ax9.barh(flag_data["Approved_Flag"], flag_data["PROSPECTID"], color='brown', edgecolor='black')
     ax9.set_title("Approved Flag", fontsize=10)
-    # Ensure enough space for short bars
-    ax9.set_xlim(0, flag_data["PROSPECTID"].max() * 1.15)
-    # Annotate each bar (inside if wide enough, else outside)
+    # Set x-axis limit slightly higher than max width to avoid label clipping
+    max_width = flag_data["PROSPECTID"].max()
+    ax9.set_xlim(0, max_width * 1.1)  # Add 10% padding
+    # Annotate each bar
     for bar in bars:
         width = bar.get_width()
         label = f"{int(width):,}"
-    # Use white inside the bar if there's enough space, otherwise black outside
-        if width > flag_data["PROSPECTID"].max() * 0.15:
+
+        if width > max_width * 0.1:
+            # Place inside bar if long enough
             ax9.annotate(label,
-                         xy=(width - 2000, bar.get_y() + bar.get_height() / 2),
+                         xy=(width - (max_width * 0.02), bar.get_y() + bar.get_height() / 2),
                          ha='right', va='center', fontsize=7, color='white')
         else:
             ax9.annotate(label,
-                         xy=(width + 200, bar.get_y() + bar.get_height() / 2),
+                         xy=(width + (max_width * 0.01), bar.get_y() + bar.get_height() / 2),
                          ha='left', va='center', fontsize=7, color='black')
+
+    # Tight layout to avoid clipping
+    fig9.tight_layout()
     st.pyplot(fig9)
     plt.close(fig9)
+
 
     # 10. Top Missed Payments
     st.subheader("Top Missed Payments")
