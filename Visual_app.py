@@ -123,6 +123,10 @@ else:
     fig5, ax5 = plt.subplots(figsize=(7, 4))
     ax5.bar(income_data["NETMONTHLYINCOME"].astype(str), income_data["PROSPECTID"], color='magenta', edgecolor='black')
     ax5.set_title("Top 5 Income Applicants", fontsize=10)
+    for bar in bars:
+        ax5.annotate(format_value(bar.get_width()),
+                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
+                     ha='left', va='center', fontsize=6)
     st.pyplot(fig5)
     plt.close(fig5)
 
@@ -132,6 +136,10 @@ else:
     fig6, ax6 = plt.subplots(figsize=(7, 4))
     ax6.bar(score_data["Credit_Score"].astype(str), score_data["PROSPECTID"], color='purple', edgecolor='black')
     ax6.set_title("Credit Score Distribution", fontsize=10)
+    for bar in bars:
+        ax6.annotate(format_value(bar.get_width()),
+                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
+                     ha='left', va='center', fontsize=6)
     st.pyplot(fig6)
     plt.close(fig6)
 
@@ -170,6 +178,10 @@ else:
     fig8, ax8 = plt.subplots(figsize=(7, 4))
     ax8.barh(seg_data["Credit_Score_Category"], seg_data["PROSPECTID"], color='teal', edgecolor='black')
     ax8.set_title("Credit Score Segmentation", fontsize=10)
+    for bar in bars:
+        ax8.annotate(format_value(bar.get_width()),
+                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
+                     ha='left', va='center', fontsize=6)
     st.pyplot(fig8)
     plt.close(fig8)
 
@@ -179,6 +191,10 @@ else:
     fig9, ax9 = plt.subplots(figsize=(7, 4))
     ax9.barh(flag_data["Approved_Flag"], flag_data["PROSPECTID"], color='brown', edgecolor='black')
     ax9.set_title("Approved Flag", fontsize=10)
+    for bar in bars:
+        ax9.annotate(format_value(bar.get_width()),
+                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
+                     ha='left', va='center', fontsize=6)
     st.pyplot(fig9)
     plt.close(fig9)
 
@@ -188,6 +204,10 @@ else:
     fig10, ax10 = plt.subplots(figsize=(7, 4))
     ax10.barh(missed_data["Tot_Missed_Pmnt"].astype(str), missed_data["PROSPECTID"], color='red', edgecolor='black')
     ax10.set_title("Top Missed Payments", fontsize=10)
+    for bar in bars:
+        ax10.annotate(format_value(bar.get_width()),
+                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
+                     ha='left', va='center', fontsize=6)
     st.pyplot(fig10)
     plt.close(fig10)
 
@@ -197,6 +217,10 @@ else:
     fig11, ax11 = plt.subplots(figsize=(7, 4))
     ax11.barh(new_data["Total_TL_opened_L6M"].astype(str), new_data["PROSPECTID"], color='navy', edgecolor='black')
     ax11.set_title("New Accounts in Last 6M", fontsize=10)
+    for bar in bars:
+        ax11.annotate(format_value(bar.get_width()),
+                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
+                     ha='left', va='center', fontsize=6)
     st.pyplot(fig11)
     plt.close(fig11)
 
@@ -206,5 +230,9 @@ else:
     fig12, ax12 = plt.subplots(figsize=(7, 4))
     ax12.barh(closed_data["Tot_TL_closed_L6M"].astype(str), closed_data["PROSPECTID"], color='gray', edgecolor='black')
     ax12.set_title("Closed Accounts in Last 6M", fontsize=10)
+    for bar in bars:
+        ax12.annotate(format_value(bar.get_width()),
+                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
+                     ha='left', va='center', fontsize=6)
     st.pyplot(fig12)
     plt.close(fig12)
