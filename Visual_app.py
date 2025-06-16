@@ -123,16 +123,18 @@ else:
     st.subheader("Top 5 Applicants by Income")
     income_data = df2.groupby("NETMONTHLYINCOME")["PROSPECTID"].count().sort_values(ascending=False).head(5).reset_index()
     fig5, ax5 = plt.subplots(figsize=(6, 3))
-    ax5.bar(income_data["NETMONTHLYINCOME"].astype(str), income_data["PROSPECTID"], color='magenta', edgecolor='black')
+    bars = ax5.bar(income_data["NETMONTHLYINCOME"].astype(str), income_data["PROSPECTID"], color='magenta', edgecolor='black')
     ax5.set_title("Top 5 Income Applicants", fontsize=10)
-# Annotate bars (data labels on top)
+
+    # Annotate bars (data labels on top)
     for bar in bars:
-    height = bar.get_height()
-    ax5.annotate(f"{height}",
-                 xy=(bar.get_x() + bar.get_width() / 2, height),
-                 xytext=(0, 3),  # offset
-                 textcoords="offset points",
-                 ha='center', va='bottom', fontsize=8)
+        height = bar.get_height()
+        ax5.annotate(f"{height}",
+                     xy=(bar.get_x() + bar.get_width() / 2, height),
+                     xytext=(0, 3),  # offset
+                     textcoords="offset points",
+                     ha='center', va='bottom', fontsize=8
+                     
     st.pyplot(fig5)
     plt.close(fig5)
 
