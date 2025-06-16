@@ -237,18 +237,35 @@ else:
 
     # 10. Top Missed Payments
     st.subheader("Top Missed Payments")
-    missed_data = df1[df1["Tot_Missed_Pmnt"] > 0].groupby("Tot_Missed_Pmnt")["PROSPECTID"].count().sort_values(ascending=False).head(5).reset_index()
+    # Prepare data
+    missed_data = (df1[df1["Tot_Missed_Pmnt"] > 0].groupby("Tot_Missed_Pmnt")["PROSPECTID"].count().sort_values(ascending=False).head(5).reset_index())
+
+    # Plot setup
     fig10, ax10 = plt.subplots(figsize=(6, 3))
-    ax10.barh(missed_data["Tot_Missed_Pmnt"].astype(str), missed_data["PROSPECTID"], color='red', edgecolor='black')
+    bars = ax10.barh(missed_data["Tot_Missed_Pmnt"].astype(str), missed_data["PROSPECTID"], color='red', edgecolor='black')
+
+    # Title and ticks
     ax10.set_title("Top Missed Payments", fontsize=10)
     ax10.tick_params(axis='y', labelsize=6)
     ax10.tick_params(axis='x', labelsize=6)
+
+    # Calculate padding
+    max_width = missed_data["PROSPECTID"].max()
+    ax10.set_xlim(0, max_width * 1.15)
+
+    # Annotate bars
     for bar in bars:
-        ax10.annotate(format_value(bar.get_width()),
-                     xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
-                     ha='left', va='center', fontsize=6)
+        width = bar.get_width()
+        label_x_pos = width + (max_width * 0.015)
+        ax10.annotate(f"{int(width):,}",
+                      xy=(label_x_pos, bar.get_y() + bar.get_height() / 2),
+                      ha='left', va='center', fontsize=6, color='black')
+
+    # Render
+    fig10.tight_layout()
     st.pyplot(fig10)
     plt.close(fig10)
+
 
     # 11. New Accounts Opened in Last 6 Months
     st.subheader("New Accounts Opened in Last 6 Months")
