@@ -171,11 +171,14 @@ else:
     # 7. Risk Category Pie
     st.subheader("Risk Category Distribution")
     risk_data = df1.groupby("Risk_Category")["PROSPECTID"].count()
-    fig7, ax7 = plt.subplots(figsize=(1, 1))
-    ax7.pie(risk_data, labels=risk_data.index, autopct="%.2f%%", startangle=90,textprops={'fontsize': 3} )
-    ax7.axis("equal")
-    st.pyplot(fig7)
+    fig7, ax7 = plt.subplots(figsize=(2, 2), dpi=300)  # Higher DPI for clarity
+    ax7.pie(risk_data,labels=risk_data.index,autopct="%.2f%%",startangle=90,textprops={'fontsize': 5},labeldistance=1.1,   # Push category labels out
+    pctdistance=0.75     # Adjust position of % labels inside slices
+    )
+    ax7.axis("equal")  # Equal aspect ratio to maintain circle
+    st.pyplot(fig7, bbox_inches="tight")
     plt.close(fig7)
+
 
     # Create Credit Score Category column
     def categorize_credit_score(score):
