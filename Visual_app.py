@@ -125,6 +125,8 @@ else:
     fig5, ax5 = plt.subplots(figsize=(6, 3))
     bars = ax5.bar(income_data["NETMONTHLYINCOME"].astype(str), income_data["PROSPECTID"], color='magenta', edgecolor='black')
     ax5.set_title("Top 5 Income Applicants", fontsize=10)
+    ax5.tick_params(axis='y', labelsize=6)
+    ax5.tick_params(axis='x', labelsize=6)
 
     # Annotate bars (data labels in the middle)
     for bar in bars:
@@ -143,12 +145,14 @@ else:
     fig6, ax6 = plt.subplots(figsize=(6, 3))
     ax6.bar(score_data["Credit_Score"].astype(str), score_data["PROSPECTID"], color='purple', edgecolor='black')
     ax6.set_title("Credit Score Distribution", fontsize=10)
+    ax6.tick_params(axis='y', labelsize=6)
+    ax6.tick_params(axis='x', labelsize=6)
     # Annotate bars (data labels in the middle)
     for bar in bars:
         height = bar.get_height()
         ax6.annotate(f"{height}",
                      xy=(bar.get_x() + bar.get_width() / 2, height / 2),
-                     ha='center', va='center', fontsize=8, color='white')
+                     ha='center', va='center', fontsize=7, color='white')
     st.pyplot(fig6)
     plt.close(fig6)
 
