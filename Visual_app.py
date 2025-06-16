@@ -215,8 +215,8 @@ else:
     fig8, ax8 = plt.subplots(figsize=(6, 3))
     bars = ax8.barh(seg_data["Credit_Score_Category"], seg_data["PROSPECTID"], color='teal', edgecolor='black')
     ax8.set_title("Credit Score Segmentation", fontsize=10)
-    ax8.set_xlabel("Segmentation", fontsize=6)
-    ax8.set_ylabel("Applicant's count", fontsize=6)
+    ax8.set_xlabel("Applicant's count", fontsize=6)
+    ax8.set_ylabel("Segmentation", fontsize=6)
 
     # Add data labels to bars
     for bar in bars:
@@ -268,8 +268,8 @@ else:
 
     # Title and ticks
     ax10.set_title("Top Missed Payments", fontsize=8)
-    ax10.set_xlabel("Missed Payments", fontsize=6)
-    ax10.set_ylabel("Applicant's count", fontsize=6)
+    ax10.set_xlabel("Applicant's Count", fontsize=6)
+    ax10.set_ylabel("Missed Payments", fontsize=6)
     ax10.tick_params(axis='y', labelsize=6)
     ax10.tick_params(axis='x', labelsize=6)
 
@@ -297,8 +297,8 @@ else:
     fig11, ax11 = plt.subplots(figsize=(6, 3))
     bars = ax11.barh(new_data["Total_TL_opened_L6M"].astype(str), new_data["PROSPECTID"], color='navy', edgecolor='black')
     ax11.set_title("New Accounts in Last 6M", fontsize=8)
-    ax11.set_xlabel("New accounts", fontsize=6)
-    ax11.set_ylabel("Applicant's count", fontsize=6)
+    ax11.set_xlabel("Applicant's count", fontsize=6)
+    ax11.set_ylabel("New Accounts", fontsize=6)
     ax11.tick_params(axis='y', labelsize=6)
     ax11.tick_params(axis='x', labelsize=6)
 
@@ -323,8 +323,8 @@ else:
     fig12, ax12 = plt.subplots(figsize=(6, 3))
     ax12.barh(closed_data["Tot_TL_closed_L6M"].astype(str), closed_data["PROSPECTID"], color='gray', edgecolor='black')
     ax12.set_title("Closed Accounts in Last 6M", fontsize=8)
-    ax12.set_xlabel("Closed Accounts", fontsize=6)
-    ax12.set_ylabel("Applicant's count", fontsize=6)
+    ax12.set_xlabel("Applicant's count", fontsize=6)
+    ax12.set_ylabel("Closed Accounts", fontsize=6)
     ax12.tick_params(axis='y', labelsize=6)
     ax12.tick_params(axis='x', labelsize=6)
     for bar in bars:
