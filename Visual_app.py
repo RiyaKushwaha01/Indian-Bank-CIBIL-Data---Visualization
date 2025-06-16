@@ -143,18 +143,22 @@ else:
     st.subheader("Top 10 Credit Scores")
     score_data = df2.groupby("Credit_Score")["PROSPECTID"].count().sort_values(ascending=False).head(10).reset_index()
     fig6, ax6 = plt.subplots(figsize=(6, 3))
-    ax6.bar(score_data["Credit_Score"].astype(str), score_data["PROSPECTID"], color='purple', edgecolor='black')
+
+    bars = ax6.bar(score_data["Credit_Score"].astype(str), score_data["PROSPECTID"], color='purple', edgecolor='black')
     ax6.set_title("Credit Score Distribution", fontsize=10)
     ax6.tick_params(axis='y', labelsize=6)
     ax6.tick_params(axis='x', labelsize=6)
+
     # Annotate bars (data labels in the middle)
     for bar in bars:
         height = bar.get_height()
         ax6.annotate(f"{height}",
                      xy=(bar.get_x() + bar.get_width() / 2, height / 2),
                      ha='center', va='center', fontsize=7, color='white')
+
     st.pyplot(fig6)
     plt.close(fig6)
+
 
     # Create Risk_Category column
     df1['Risk_Category'] = df1['Tot_Missed_Pmnt'].apply(
