@@ -86,7 +86,7 @@ else:
     # 2. Gender Pie
     st.subheader("Gender Distribution")
     gender_data = filtered_df2["GENDER"].value_counts()
-    fig2, ax2 = plt.subplots(figsize=(1, 1))
+    fig2, ax2 = plt.subplots(figsize=(0.5, 0.5))
     ax2.pie(gender_data, labels=gender_data.index, autopct="%.2f%%", startangle=90, textprops={'fontsize': 4})
     ax2.axis("equal")
     st.pyplot(fig2)
