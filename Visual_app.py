@@ -197,7 +197,7 @@ else:
     ax8.set_title("Credit Score Segmentation", fontsize=10)
     for bar in bars:
             height = bar.get_height()
-            ax1.annotate(format_value(height),
+            ax8.annotate(format_value(height),
                          xy=(bar.get_x() + bar.get_width() / 2, height),
                          xytext=(0, 3), textcoords="offset points",
                          ha='center', va='bottom', fontsize= 7)
