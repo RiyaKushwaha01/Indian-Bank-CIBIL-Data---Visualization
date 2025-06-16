@@ -172,7 +172,7 @@ else:
     st.subheader("Risk Category Distribution")
     risk_data = df1.groupby("Risk_Category")["PROSPECTID"].count()
     fig7, ax7 = plt.subplots(figsize=(1, 1), dpi=300)  # Higher DPI for clarity
-    ax7.pie(risk_data,labels=risk_data.index,autopct="%.2f%%",startangle=90,textprops={'fontsize': 5},labeldistance=1.1,   # Push category labels out
+    ax7.pie(risk_data,labels=risk_data.index,autopct="%.2f%%",startangle=90,textprops={'fontsize': 2},labeldistance=1.1,   # Push category labels out
     pctdistance=0.75     # Adjust position of % labels inside slices
     )
     ax7.axis("equal")  # Equal aspect ratio to maintain circle
