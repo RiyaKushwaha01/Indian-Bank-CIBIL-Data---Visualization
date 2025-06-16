@@ -191,17 +191,22 @@ else:
 
     # 8. Credit Score Segmentation
     st.subheader("Credit Score Segmentation")
+    # Group data
     seg_data = df2.groupby("Credit_Score_Category")["PROSPECTID"].count().sort_values(ascending=False).reset_index()
+    # Plot
     fig8, ax8 = plt.subplots(figsize=(6, 3))
     bars = ax8.barh(seg_data["Credit_Score_Category"], seg_data["PROSPECTID"], color='teal', edgecolor='black')
     ax8.set_title("Credit Score Segmentation", fontsize=10)
-    for bar in bars:
-            height = bar.get_height()
-            ax8.annotate(format_value(height),
-                         xy=(bar.get_x() + bar.get_width() / 2, height),
-                         xytext=(0, 3), textcoords="offset points",
-                         ha='center', va='bottom', fontsize= 7)
 
+    # Add data labels to bars
+    for bar in bars:
+        width = bar.get_width()
+        ax8.annotate(f"{int(width)}",  # or use format_value(width) if you have a formatter
+                     xy=(width, bar.get_y() + bar.get_height() / 2),
+                     xytext=(5, 0),  # slight right offset
+                     textcoords="offset points",
+                     ha='left', va='center', fontsize=7, color='black')
+    # Show in Streamlit
     st.pyplot(fig8)
     plt.close(fig8)
 
