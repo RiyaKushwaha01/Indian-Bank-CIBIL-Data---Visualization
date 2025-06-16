@@ -186,7 +186,7 @@ else:
 
     # Display in Streamlit (shrink view size, not image quality)
     image = Image.open(buf)
-    st.image(image, use_column_width=False)  # auto size from fig, no upscaling
+    st.image(image, use_column_width=True)  # auto size from fig, no upscaling
 
 
 
