@@ -86,11 +86,14 @@ else:
     # 2. Gender Pie
     st.subheader("Gender Distribution")
     gender_data = filtered_df2["GENDER"].value_counts()
-    fig2, ax2 = plt.subplots(figsize=(0.5, 0.5))
-    ax2.pie(gender_data, labels=gender_data.index, autopct="%.2f%%", startangle=90, textprops={'fontsize': 2})
+    # Use a slightly larger figure for clarity, but render tightly
+    fig2, ax2 = plt.subplots(figsize=(2, 2), dpi=200)  # High DPI for sharpness
+    ax2.pie(gender_data,labels=gender_data.index,autopct="%.2f%%",startangle=90,textprops={'fontsize': 6}  # Small but readable)
+    # Equal aspect ratio ensures a circle
     ax2.axis("equal")
-    st.pyplot(fig2)
+    st.pyplot(fig2, bbox_inches="tight")
     plt.close(fig2)
+
 
     # 3. Marital Status Distribution
     st.subheader("Marital Status Distribution")
