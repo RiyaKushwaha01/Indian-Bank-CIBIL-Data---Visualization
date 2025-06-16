@@ -173,22 +173,15 @@ else:
 
 
     # 7. Risk Category Pie
+    st.markdown("<div style='margin-bottom: -20px;'></div>", unsafe_allow_html=True)
     st.subheader("Risk Category Distribution")
     risk_data = df1.groupby("Risk_Category")["PROSPECTID"].count()
-    fig7, ax7 = plt.subplots(figsize=(1,1), dpi=600)
-    ax7.pie( risk_data, labels=risk_data.index, autopct="%.2f%%", startangle=90, textprops={'fontsize':2}, labeldistance=1.15, pctdistance=0.7)
-    ax7.axis("equal")  # Keep it circular
-    # Save image to buffer
-    buf = io.BytesIO()
-    fig7.savefig(buf, format="png", bbox_inches="tight", pad_inches=0.05)
-    buf.seek(0)
+    fig7, ax7 = plt.subplots(figsize=(2, 1.2), dpi=600)
+    ax7.pie(risk_data, labels=risk_data.index, autopct="%.2f%%", startangle=90, textprops={'fontsize': 3})
+    ax7.axis("equal")
+    fig7.tight_layout(pad=0.5)  # Reduce inner padding
+    st.pyplot(fig7, bbox_inches="tight")
     plt.close(fig7)
-
-    # Display in Streamlit (shrink view size, not image quality)
-    image = Image.open(buf)
-    st.image(image, use_column_width=True)  # auto size from fig, no upscaling
-
-
 
     # Create Credit Score Category column
     def categorize_credit_score(score):
