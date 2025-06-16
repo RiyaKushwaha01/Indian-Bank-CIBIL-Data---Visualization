@@ -241,6 +241,8 @@ else:
     fig10, ax10 = plt.subplots(figsize=(6, 3))
     ax10.barh(missed_data["Tot_Missed_Pmnt"].astype(str), missed_data["PROSPECTID"], color='red', edgecolor='black')
     ax10.set_title("Top Missed Payments", fontsize=10)
+    ax10.tick_params(axis='y', labelsize=6)
+    ax10.tick_params(axis='x', labelsize=6)
     for bar in bars:
         ax10.annotate(format_value(bar.get_width()),
                      xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
