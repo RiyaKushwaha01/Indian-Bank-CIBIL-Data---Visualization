@@ -4,4 +4,4 @@ matplotlib
 seaborn
 openpyxl
 zipfile36
-io
+Pillow
