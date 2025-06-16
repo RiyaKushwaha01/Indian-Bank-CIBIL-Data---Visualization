@@ -72,6 +72,8 @@ else:
         bars = ax1.bar(edu_data["EDUCATION"], edu_data["PROSPECTID"], color='skyblue', edgecolor='black')
         ax1.set_title("Education Distribution", fontsize=8)
         ax1.tick_params(axis='x', labelrotation=45)
+        ax1.set_xlabel("Education Level", fontsize=6)
+        ax1.set_ylabel("Applicant's count", fontsize=6)
         ax1.tick_params(axis='y', labelsize=6)
         ax1.tick_params(axis='x', labelsize=6)
         for bar in bars:
@@ -105,6 +107,8 @@ else:
     fig3, ax3 = plt.subplots(figsize=(6, 3))
     bars = ax3.barh(marital_data["MARITALSTATUS"], marital_data["Count"], color='lightgreen', edgecolor='black')
     ax3.set_title("Distribution of MartitalStatus", fontsize=8)
+    ax3.set_xlabel("Applicant's count", fontsize=6)
+    ax3.set_ylabel("Marital Status", fontsize=6)
     for bar in bars:
         ax3.annotate(format_value(bar.get_width()),
                      xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
@@ -118,6 +122,8 @@ else:
     fig4, ax4 = plt.subplots(figsize=(6, 3))
     bars = ax4.barh(loan_data["first_prod_enq2"], loan_data["PROSPECTID"], color='orange', edgecolor='black')
     ax4.set_title("Loan Type Distribution", fontsize=8)
+    ax4.set_xlabel("Applicant's count", fontsize=6)
+    ax4.set_ylabel("Loan Type", fontsize=6)
     for bar in bars:
         ax4.annotate(format_value(bar.get_width()),
                      xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
@@ -131,9 +137,10 @@ else:
     fig5, ax5 = plt.subplots(figsize=(6, 3))
     bars = ax5.bar(income_data["NETMONTHLYINCOME"].astype(str), income_data["PROSPECTID"], color='magenta', edgecolor='black')
     ax5.set_title("Top 5 Income Applicants", fontsize=8)
+    ax5.set_xlabel("Net Income", fontsize=6)
+    ax5.set_ylabel("Applicant's count", fontsize=6)
     ax5.tick_params(axis='y', labelsize=6)
     ax5.tick_params(axis='x', labelsize=6)
-
     # Annotate bars (data labels in the middle)
     for bar in bars:
         height = bar.get_height()
@@ -152,6 +159,8 @@ else:
 
     bars = ax6.bar(score_data["Credit_Score"].astype(str), score_data["PROSPECTID"], color='purple', edgecolor='black')
     ax6.set_title("Credit Score Distribution", fontsize=8)
+    ax6.set_xlabel("Credit Score", fontsize=6)
+    ax6.set_ylabel("Applicant's count", fontsize=6)
     ax6.tick_params(axis='y', labelsize=6)
     ax6.tick_params(axis='x', labelsize=6)
 
@@ -206,6 +215,8 @@ else:
     fig8, ax8 = plt.subplots(figsize=(6, 3))
     bars = ax8.barh(seg_data["Credit_Score_Category"], seg_data["PROSPECTID"], color='teal', edgecolor='black')
     ax8.set_title("Credit Score Segmentation", fontsize=10)
+    ax8.set_xlabel("Segmentation", fontsize=6)
+    ax8.set_ylabel("Applicant's count", fontsize=6)
 
     # Add data labels to bars
     for bar in bars:
@@ -229,6 +240,8 @@ else:
     ax9.set_title("Approved Flag", fontsize=10)
     max_width = flag_data["PROSPECTID"].max()
     ax9.set_xlim(0, max_width * 1.15)  # Add 15% padding for better label spacing
+    ax9.set_xlabel("Applicant's count", fontsize=6)
+    ax9.set_ylabel("Approval Flag", fontsize=6)
     ax9.tick_params(axis='y', labelsize=6)
     ax9.tick_params(axis='x', labelsize=6)
     # Annotate each bar (always to the right of the bar for visibility)
@@ -255,6 +268,8 @@ else:
 
     # Title and ticks
     ax10.set_title("Top Missed Payments", fontsize=8)
+    ax10.set_xlabel("Missed Payments", fontsize=6)
+    ax10.set_ylabel("Applicant's count", fontsize=6)
     ax10.tick_params(axis='y', labelsize=6)
     ax10.tick_params(axis='x', labelsize=6)
 
