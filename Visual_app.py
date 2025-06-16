@@ -196,14 +196,12 @@ else:
     bars = ax8.barh(seg_data["Credit_Score_Category"], seg_data["PROSPECTID"], color='teal', edgecolor='black')
     ax8.set_title("Credit Score Segmentation", fontsize=10)
 
-    # Annotate bars (data labels inside or at the end of the bars)
+    # Add annotations (labels) to bars
     for bar in bars:
         width = bar.get_width()
-        ax8.annotate(f"{width}",  # You can use format_value(width) if format_value is defined
-                     xy=(width, bar.get_y() + bar.get_height() / 2),
-                     xytext=(3, 0),  # Small offset to avoid overlap
-                     textcoords="offset points",
-                     ha='left', va='center', fontsize=6, color='black')
+        label_x_pos = width + 5  # shift slightly right of bar
+        ax8.text(label_x_pos, bar.get_y() + bar.get_height()/2,
+                f"{int(width)}", va='center', ha='left', fontsize=8, color='black')
 
     st.pyplot(fig8)
     plt.close(fig8)
