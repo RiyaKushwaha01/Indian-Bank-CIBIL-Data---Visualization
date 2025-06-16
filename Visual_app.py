@@ -297,6 +297,8 @@ else:
     fig12, ax12 = plt.subplots(figsize=(6, 3))
     ax12.barh(closed_data["Tot_TL_closed_L6M"].astype(str), closed_data["PROSPECTID"], color='gray', edgecolor='black')
     ax12.set_title("Closed Accounts in Last 6M", fontsize=10)
+    ax12.tick_params(axis='y', labelsize=6)
+    ax12.tick_params(axis='x', labelsize=6)
     for bar in bars:
         ax12.annotate(format_value(bar.get_width()),
                      xy=(bar.get_width(), bar.get_y() + bar.get_height() / 2),
