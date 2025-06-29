@@ -23,7 +23,7 @@ This pivotal metric serves as a gateway to understanding risk management in inst
 
 Engage with this dataset today to uncover patterns, derive insightful conclusions, and push the boundaries of Risk analytics!
 
-**Web Application Link** : https://loan-approval-indian-bank-cibil-data.onrender.com/
+**Web Application Link** for Dynamic Dashboard: https://indian-bank-cibil-data---visualization-ioqwfzkh4zrzrfus6tkaw8.streamlit.app/
 
 Use ID & Password to access the link:
 
