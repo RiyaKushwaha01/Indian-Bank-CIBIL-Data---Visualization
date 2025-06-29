@@ -1,4 +1,4 @@
-# CIBIL-DATA
+# EDA & Visualizations
 
 **Problem Statement:**
 
