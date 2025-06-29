@@ -1,7 +1,5 @@
 # CIBIL-DATA
 
-# Loan-Approval-Indian-Bank-CIBIL-Data
-
 **Problem Statement:**
 
 A leading Bank experiencing financial losses due to loan defaults - customers who are unable to repay their loans on time. This not only affects bank's profitability but also its ovevrall performance. To tackle this issue, the goal is to build a **Predictive Model** that can help the bank to identify high-risk customers before approving a loan. 
